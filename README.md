@@ -1,11 +1,10 @@
 # Collaborative Todo Lists
 
 A customer-facing application for creating and sharing todo lists and tasks within shared
-workspaces. **Current state: planning / scaffold — there is no application code yet.** This
-repo currently holds the development environment, the agent toolchain, and one accepted
-architecture decision; the app will be built from here.
+workspaces. **Current state: scaffold in place — Next.js app and database layer exist;
+feature implementation starts from here.**
 
-**Planned stack:** TypeScript · Next.js (App Router, per [ADR-0001](docs/adr/0001-adopt-nextjs-as-frontend-framework.md)) · PostgreSQL · Vitest.
+**Stack:** TypeScript · Next.js 15 App Router ([ADR-0001](docs/adr/0001-adopt-nextjs-as-frontend-framework.md)) · PostgreSQL 17 ([ADR-0003](docs/adr/0003-postgresql-as-the-database.md)) · Drizzle ORM ([ADR-0004](docs/adr/0004-data-access-with-orm-and-migrations.md)) · Vitest.
 
 Two sources of truth, split by topic:
 
@@ -17,6 +16,12 @@ Two sources of truth, split by topic:
 
 | Path | What it is |
 |------|-----------|
+| `src/app/` | Next.js App Router — pages, layouts, Route Handlers |
+| `src/db/schema.ts` | Drizzle schema — source of truth for the data model |
+| `src/db/client.ts` | Drizzle client singleton (`db`) |
+| `src/db/migrations/` | Generated SQL migrations, applied with `npm run db:migrate` |
+| `drizzle.config.ts` | drizzle-kit configuration |
+| `.env.local.example` | Template for local env vars — copy to `.env.local` |
 | `.spec-lite/` | Product definition, domain model (Workspace/List/Task/Member), assumptions, feature tracking |
 | `docs/adr/` | Architecture Decision Records, with index (`README.md`) and `template.md` |
 | `docs/architecture/` | C4 overview (System Context + Container diagrams) linking the ADRs |
@@ -25,6 +30,37 @@ Two sources of truth, split by topic:
 | `.devcontainer/` | Dev environment: Dockerfile, `devcontainer.json`, setup scripts |
 | `docker-compose.postgres.yml` | PostgreSQL 17 service for local development |
 | `CLAUDE.md` | Operating guide for AI agents working in this repo |
+
+## Getting started
+
+```bash
+# 1. Copy env template and fill in DATABASE_URL
+cp .env.local.example .env.local
+
+# 2. Start PostgreSQL
+docker compose -f docker-compose.postgres.yml up -d
+
+# 3. Install dependencies
+npm install
+
+# 4. Apply database migrations
+npm run db:migrate
+
+# 5. Run the dev server (requires NODE_ENV workaround — see CLAUDE.md)
+npm run dev
+```
+
+Common scripts:
+
+| Script | What it does |
+|--------|-------------|
+| `npm run dev` | Start Next.js dev server |
+| `npm run build` | Production build (`NODE_ENV=production npm run build`) |
+| `npm test` | Run Vitest once |
+| `npm run test:watch` | Vitest in watch mode |
+| `npm run db:generate` | Generate a new migration from schema changes |
+| `npm run db:migrate` | Apply pending migrations to the database |
+| `npm run db:studio` | Open Drizzle Studio (database browser) |
 
 ## Tooling & Workflows
 
@@ -275,6 +311,10 @@ docker compose -f docker-compose.postgres.yml down -v
 ```
 
 Connection: `postgresql://postgres:postgres@localhost:5432/app_db`
+
+Set `DATABASE_URL` in `.env.local` to this value. Run `npm run db:migrate` after starting
+PostgreSQL to apply schema migrations. `npm run db:studio` opens a browser-based database
+browser (Drizzle Studio).
 
 ## Bun
 

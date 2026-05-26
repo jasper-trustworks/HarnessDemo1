@@ -1,11 +1,10 @@
 # Collaborative Todo Lists
 
 A customer-facing application that lets users create and share lists and tasks within a
-shared workspace. **Current state: planning / scaffold — there is no application code yet.**
-What exists today is the development environment, the agent toolchain, and one accepted
-architecture decision. Build the app from here.
+shared workspace. **Current state: scaffold in place — Next.js app and database layer exist;
+feature implementation starts from here.**
 
-Planned stack: **TypeScript · Next.js (App Router, per ADR-0001) · PostgreSQL · Vitest**.
+Stack: **TypeScript · Next.js 15 (App Router, ADR-0001) · PostgreSQL 17 (ADR-0003) · Drizzle ORM (ADR-0004) · Vitest**.
 
 Two sources of truth, split by topic:
 - **Product** scope, domain model, assumptions, and feature status → `.spec-lite/project.md`.
@@ -36,11 +35,22 @@ Other documents — including `.spec-lite/project.md` — **reference** ADRs rat
 their content. Do not duplicate a decision's rationale or constraints outside its ADR; link to
 the ADR instead. If any document ever conflicts with an accepted ADR, the ADR wins.
 
-Constraints already in force from **ADR-0001 (Next.js App Router)**:
+Constraints already in force:
+
+**ADR-0001 (Next.js App Router)**
 - Default every component to a **Server Component**; add `'use client'` only when you need
   event handlers or browser APIs.
 - Use `cache: 'no-store'` for authenticated routes; add caching explicitly and deliberately.
 - Pin the Next.js **minor** version in CI; review the changelog before upgrading.
+
+**ADR-0003 (PostgreSQL)**
+- All schema changes must go through a reviewed Drizzle migration — no ad-hoc DDL.
+- Use a serverless-safe connection strategy (`max: 1` or a managed pooler) — see `src/db/client.ts`.
+
+**ADR-0004 (Drizzle ORM)**
+- Route Handlers call the repository/data-access layer; they never issue raw SQL inline.
+- `src/db/schema.ts` is the single source of truth for the data model; generate migrations
+  with `npm run db:generate` and apply them with `npm run db:migrate`.
 
 (Note: a leftover `.architecture/` directory exists from an abandoned experiment — ignore it.
 ADRs live only in `docs/adr/`.)
@@ -49,8 +59,15 @@ ADRs live only in `docs/adr/`.)
 
 | Path | What it is |
 |------|-----------|
+| `src/app/` | Next.js App Router — pages, layouts, Route Handlers |
+| `src/db/schema.ts` | Drizzle schema — single source of truth for the data model |
+| `src/db/client.ts` | Drizzle client singleton (`db`) — import this to query the database |
+| `src/db/migrations/` | Generated SQL migrations — checked in, applied with `npm run db:migrate` |
+| `drizzle.config.ts` | drizzle-kit config (schema path, migrations dir, dialect) |
+| `.env.local.example` | Template for local env vars (copy to `.env.local`, gitignored) |
 | `.spec-lite/` | Product definition, domain model, assumptions, feature tracking |
 | `docs/adr/` | Architecture Decision Records (+ index and template) |
+| `docs/architecture/` | C4 overview (System Context + Container diagrams) |
 | `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions |
 | `.claude/` | Claude Code project settings, enabled plugins, synced skills |
 | `.devcontainer/` | Dev environment: Dockerfile, devcontainer.json, setup scripts |
@@ -93,16 +110,23 @@ Full detail lives in `README.md`; the rules that affect how you run commands:
   identity is unset, point them there first; in-container `git config --global` does not
   survive a rebuild.
 - **PostgreSQL:** `docker compose -f docker-compose.postgres.yml up -d`.
-  Connection: `postgresql://postgres:postgres@localhost:5432/app_db`.
+  Connection string: `postgresql://postgres:postgres@localhost:5432/app_db` (set as `DATABASE_URL`).
+  Apply migrations before running the app: `npm run db:migrate`.
+- **`NODE_ENV` quirk:** the devcontainer sets `NODE_ENV=development` globally. Pass
+  `NODE_ENV=production npm run build` explicitly for production builds.
 
 ## Coding conventions
 
 - TypeScript throughout; Next.js App Router (Server Components by default — see ADR-0001).
-- Tests in **Vitest**.
+- Tests in **Vitest** (`npm test` / `npm run test:watch`).
 - Honor the installed skills — especially `clean-code`, `react-best-practices`, and
   `backend-dev-guidelines` — rather than reinventing patterns.
-- Project-specific conventions are **"none established yet"** per `.spec-lite/project.md`.
-  As real conventions emerge (folder layout, naming, error handling), record them here and
-  in spec-lite so they stay consistent.
+
+**Established conventions:**
+- `src/db/schema.ts` — all table/enum definitions live here; never define schema inline.
+- `src/db/` — data-access layer; Route Handlers import `db` from `src/db/client.ts` and call
+  repository functions, never raw Drizzle queries in request handlers.
+- `src/app/api/` — Route Handlers only; no business logic, only parse → call repository → respond.
+- `src/app/` pages default to Server Components; add `'use client'` only for interactivity.
 
 See `README.md` for full environment setup, Claude Code authentication, and troubleshooting.
