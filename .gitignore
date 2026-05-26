@@ -14,6 +14,9 @@ out/
 node_modules/
 next-env.d.ts
 
+# TypeScript build cache
+*.tsbuildinfo
+
 # env files
 .env
 .env*.local
