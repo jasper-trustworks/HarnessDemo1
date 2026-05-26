@@ -7,3 +7,16 @@
 # agr — skills fetched on demand by the SessionStart `agr sync` hook (declared in
 # agr.toml, pinned by agr.lock); not vendored into the repo
 .claude/skills/
+
+# Next.js
+.next/
+out/
+node_modules/
+next-env.d.ts
+
+# env files
+.env
+.env*.local
+
+# Vercel
+.vercel
