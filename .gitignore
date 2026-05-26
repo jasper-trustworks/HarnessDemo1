@@ -3,3 +3,7 @@
 
 # DevContainer — per-developer git identity (gitignored; copy from .env.local.example)
 .devcontainer/.env.local
+
+# agr — skills fetched on demand by the SessionStart `agr sync` hook (declared in
+# agr.toml, pinned by agr.lock); not vendored into the repo
+.claude/skills/

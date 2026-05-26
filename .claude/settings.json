@@ -9,7 +9,10 @@
       "Bash(tail *)",
       "Read",
       "Glob",
-      "Grep"
+      "Grep",
+      "Read(//home/vscode/.cache/uv/**)",
+      "Bash(sudo -n true)",
+      "Skill(update-config)"
     ],
     "deny": [],
     "defaultMode": "auto"
@@ -63,6 +66,7 @@
     }
   },
   "enabledPlugins": {
+    "arch@trustworks-plugins": true,
     "caveman@trustworks-plugins": true,
     "socratic-ideation@trustworks-plugins": true,
     "tw-claude-skills@trustworks-plugins": true,
@@ -79,5 +83,25 @@
     "tw-code-review@trustworks-plugins": true,
     "devcontainer-generator@trustworks-plugins": true
   },
-  "outputStyle": "default"
+  "skillOverrides": {
+    "code-review": "user-invocable-only",
+    "review": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only",
+    "verify": "user-invocable-only"
+  },
+  "outputStyle": "default",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "export PATH=\"$HOME/.local/bin:$PATH\"; command -v agr >/dev/null 2>&1 && agr sync >/dev/null 2>&1 || true",
+            "timeout": 120,
+            "statusMessage": "Syncing agent skills (agr sync)…"
+          }
+        ]
+      }
+    ]
+  }
 }

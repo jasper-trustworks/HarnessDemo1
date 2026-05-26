@@ -23,8 +23,14 @@ directories=(
 
 for dir in "${directories[@]}"; do
     if [ -d "$dir" ]; then
-        # Only fix ownership if not already correct
-        if [ "$(stat -c '%U' "$dir" 2>/dev/null)" != "vscode" ]; then
+        # Heal ownership if the dir OR anything nested under it isn't owned by
+        # vscode. Build-time tooling can seed a volume-mounted cache with
+        # root-owned files (e.g. uv writing ~/.cache/uv/sdists-v9 during the
+        # image build), leaving root-owned children under an otherwise
+        # vscode-owned dir. A top-level-only stat check misses those, so the
+        # cache stays unwritable. `find ... -quit` stops at the first offending
+        # entry, so the recursive chown only runs when something needs fixing.
+        if [ -n "$(find "$dir" ! -user vscode -print -quit 2>/dev/null)" ]; then
             sudo chown -R vscode:vscode "$dir" 2>/dev/null || true
         fi
     fi
@@ -165,6 +171,15 @@ fi
 # Verify UV installation
 if command -v uv &> /dev/null; then
     echo "  UV version: $(uv --version)"
+
+    # Install agr (Agent Resources) — the committed SessionStart hook in
+    # .claude/settings.json runs `agr sync` to install the skills declared in
+    # agr.toml. Installed here (not in the Dockerfile) so the binary lands in the
+    # volume-mounted ~/.local/bin and survives rebuilds. Idempotent: a no-op when
+    # agr is already present.
+    echo "  Installing agr (agent-skills manager)..."
+    uv tool install agr 2>&1 \
+        || echo "  WARNING: 'uv tool install agr' failed — the SessionStart 'agr sync' hook will no-op until agr is installed."
 fi
 
 # Verify Python installation
