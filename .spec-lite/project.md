@@ -4,10 +4,15 @@
 A customer-facing collaborative todo list application that lets users create and share lists and tasks within a shared workspace.
 
 ## Tech Stack
-- Language: TypeScript
-- Framework: Next.js
-- Test framework: Vitest (or Jest)
-- Database: PostgreSQL
+
+Technical decisions live as Architecture Decision Records in [`docs/adr/`](../docs/adr/) —
+the **source of truth**. This list is a pointer, not a second copy: see each ADR for the
+decision, its rationale, and its constraints.
+
+- Framework: Next.js (App Router) — [ADR-0001](../docs/adr/0001-adopt-nextjs-as-frontend-framework.md)
+- Language: TypeScript — no ADR yet (working assumption)
+- Database: PostgreSQL — no ADR yet (working assumption)
+- Test framework: Vitest — no ADR yet (working assumption)
 
 ## Key Conventions
 None established yet.

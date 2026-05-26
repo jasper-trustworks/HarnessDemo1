@@ -1,6 +1,68 @@
-# DevContainer Configuration
+# Collaborative Todo Lists
 
-This project uses a devcontainer for reproducible development environments.
+A customer-facing application for creating and sharing todo lists and tasks within shared
+workspaces. **Current state: planning / scaffold — there is no application code yet.** This
+repo currently holds the development environment, the agent toolchain, and one accepted
+architecture decision; the app will be built from here.
+
+**Planned stack:** TypeScript · Next.js (App Router, per [ADR-0001](docs/adr/0001-adopt-nextjs-as-frontend-framework.md)) · PostgreSQL · Vitest.
+
+Two sources of truth, split by topic:
+
+- **Product** scope, domain model, and assumptions → [`.spec-lite/project.md`](.spec-lite/project.md)
+- **Technical / architectural decisions** → [`docs/adr/`](docs/adr/) — the source of truth for *how* the system is built. Other docs reference ADRs rather than restating them.
+- Operating guide for AI agents working in this repo → [`CLAUDE.md`](CLAUDE.md)
+
+## What's in this repo
+
+| Path | What it is |
+|------|-----------|
+| `.spec-lite/` | Product definition, domain model (Workspace/List/Task/Member), assumptions, feature tracking |
+| `docs/adr/` | Architecture Decision Records, with index (`README.md`) and `template.md` |
+| `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions |
+| `.claude/` | Claude Code project settings, enabled plugins, and synced skills |
+| `.devcontainer/` | Dev environment: Dockerfile, `devcontainer.json`, setup scripts |
+| `docker-compose.postgres.yml` | PostgreSQL 17 service for local development |
+| `CLAUDE.md` | Operating guide for AI agents working in this repo |
+
+## Tooling & Workflows
+
+This repo is set up for agent-assisted development, in three layers.
+
+### Agent skills (`agr`)
+
+`agr` is a skill manager: it installs reusable Claude Code skills declared in `agr.toml`,
+pinned to exact versions in `agr.lock`, into `.claude/skills/`. A **SessionStart hook** runs
+`agr sync` automatically every session, so the declared skills are always present. 19 skills
+are installed today, covering React/Next.js, backend, API design & security, PostgreSQL,
+DDD/architecture, clean code, testing, auth, and accessibility.
+
+- **Add a skill:** add its handle to the `dependencies` list in `agr.toml`, then run `agr sync`.
+- **Remove a skill:** delete its line from `agr.toml` and run `agr sync`.
+- `.claude/skills/` is gitignored — skills are fetched on demand, not vendored.
+
+### Claude Code plugins
+
+Plugins are enabled in `.claude/settings.json` and delivered via the Trustworks marketplace
+and GitNexus (see [Plugin Marketplace](#plugin-marketplace) and
+[GitNexus Knowledge Graph](#gitnexus-knowledge-graph) below for delivery details). Notable
+plugins: `spec-lite`, `tw-code-review`, `socratic-ideation`, `arch`, `devcontainer-generator`,
+and `gitnexus`, plus official plugins (`claude-md-management`, `typescript-lsp`,
+`frontend-design`, `commit-commands`, `hookify`, `skill-creator`, `code-simplifier`,
+`context7`).
+
+### Development workflows
+
+| To… | Use |
+|-----|-----|
+| Plan and build a feature | `spec-lite` — `/spec-lite:spec` → `/spec-lite:tasks` → `/spec-lite:implement` |
+| Record an architecture / tech decision | the `architecture-decision-records` skill → write an ADR in `docs/adr/` |
+| Review changes before merge | `tw-code-review` |
+| Navigate / understand the codebase | `gitnexus` (knowledge graph; re-index with `npx gitnexus analyze`) |
+
+## Development Environment
+
+The rest of this guide documents the devcontainer-based development environment.
 
 ## Authenticating Claude Code
 
@@ -107,6 +169,9 @@ After changing `.devcontainer/` files:
 | `.devcontainer/.env.local.example` | Per-developer git-identity template (committed) — copy to `.env.local` |
 | `.devcontainer/.env.local` | Your personal git name/email (gitignored, sourced by post-create.sh) |
 | `.claude/settings.json` | Claude Code config: permission mode, sandbox, marketplaces, plugins |
+| `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions (synced by `agr sync`) |
+| `.spec-lite/project.md` | Product definition, domain model, assumptions, feature tracking |
+| `docs/adr/` | Architecture Decision Records (index + template + accepted ADRs) |
 
 All configuration changes are made in `devcontainer.json` via `build.args`. The Dockerfile is the build recipe — you normally don't need to edit it.
 

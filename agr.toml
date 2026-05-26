@@ -30,6 +30,15 @@ dependencies = [
     {handle = "sickn33/antigravity-awesome-skills/e2e-testing-patterns", type = "skill"},
     {handle = "sickn33/antigravity-awesome-skills/error-handling-patterns", type = "skill"},
     {handle = "sickn33/antigravity-awesome-skills/api-security-best-practices", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/architecture-patterns", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/clean-code", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/architecture-decision-records", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/domain-driven-design", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/ddd-tactical-patterns", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/auth-implementation-patterns", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/api-design-principles", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/accessibility-compliance-accessibility-audit", type = "skill"},
+    {handle = "sickn33/antigravity-awesome-skills/c4-architecture-c4-architecture", type = "skill"},
 ]
 
 [[source]]
