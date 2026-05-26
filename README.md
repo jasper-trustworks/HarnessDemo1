@@ -19,6 +19,7 @@ Two sources of truth, split by topic:
 |------|-----------|
 | `.spec-lite/` | Product definition, domain model (Workspace/List/Task/Member), assumptions, feature tracking |
 | `docs/adr/` | Architecture Decision Records, with index (`README.md`) and `template.md` |
+| `docs/architecture/` | C4 overview (System Context + Container diagrams) linking the ADRs |
 | `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions |
 | `.claude/` | Claude Code project settings, enabled plugins, and synced skills |
 | `.devcontainer/` | Dev environment: Dockerfile, `devcontainer.json`, setup scripts |

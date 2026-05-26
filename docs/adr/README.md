@@ -8,6 +8,10 @@ ADRs capture significant architectural decisions: their context, options conside
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|
 | [0001](0001-adopt-nextjs-as-frontend-framework.md) | Adopt Next.js as the Frontend Framework | Accepted | 2026-05-26 |
+| [0002](0002-rest-json-api-via-route-handlers.md) | Expose a REST/JSON API via Route Handlers | Proposed | 2026-05-26 |
+| [0003](0003-postgresql-as-the-database.md) | Use PostgreSQL as the Primary Database | Proposed | 2026-05-26 |
+| [0004](0004-data-access-with-orm-and-migrations.md) | Data Access with a TypeScript Query Layer and Migrations | Proposed | 2026-05-26 |
+| [0005](0005-authentication-and-workspace-authorization.md) | Authentication and Workspace-Scoped Authorization | Proposed | 2026-05-26 |
 
 ## Creating a New ADR
 
