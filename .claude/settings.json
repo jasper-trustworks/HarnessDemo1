@@ -1,27 +1,4 @@
 {
-  "enabledPlugins": {    
-    "caveman@trustworks-plugins": true,
-    "claude-md-management@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,    
-    "hookify@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "socratic-ideation@trustworks-plugins": true,
-    "spec-lite@trustworks-plugins": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "tw-code-review@trustworks-plugins": true
-  },
-  "extraKnownMarketplaces": {
-    "trustworks-plugins": {
-      "source": {
-        "repo": "trustworksdk/plugin-marketplace",
-        "source": "github"
-      }
-    }
-  },
-  "outputStyle": "default",
   "permissions": {
     "allow": [
       "Bash(git *)",
@@ -34,7 +11,73 @@
       "Glob",
       "Grep"
     ],
-    "deny": [
+    "deny": [],
+    "defaultMode": "auto"
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": true,
+    "filesystem": {
+      "allowWrite": [
+        "/workspace",
+        "/tmp",
+        "~/.npm",
+        "~/.m2",
+        "~/.bun",
+        "~/.nuget",
+        "~/.cache",
+        "~/.local",
+        "~/.config",
+        "~/.gitconfig",
+        "~/.claude"
+      ]
+    },
+    "excludedCommands": [
+      "docker",
+      "docker-compose"
     ]
-  }
+  },
+  "extraKnownMarketplaces": {
+    "gitnexus-tools": {
+      "source": {
+        "source": "settings",
+        "name": "gitnexus-tools",
+        "plugins": [
+          {
+            "name": "gitnexus",
+            "source": {
+              "source": "url",
+              "url": "https://github.com/abhigyanpatwari/GitNexus.git",
+              "path": "gitnexus-claude-plugin"
+            }
+          }
+        ]
+      }
+    },
+    "trustworks-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "/opt/claude-seed/marketplaces/trustworks-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "caveman@trustworks-plugins": true,
+    "socratic-ideation@trustworks-plugins": true,
+    "tw-claude-skills@trustworks-plugins": true,
+    "gitnexus@gitnexus-tools": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "spec-lite@trustworks-plugins": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "tw-code-review@trustworks-plugins": true,
+    "devcontainer-generator@trustworks-plugins": true
+  },
+  "outputStyle": "default"
 }

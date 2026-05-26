@@ -1,0 +1,5 @@
+# DevContainer — plugin marketplace repos (content baked into image, git history not needed)
+.devcontainer/.plugin-marketplace/
+
+# DevContainer — per-developer git identity (gitignored; copy from .env.local.example)
+.devcontainer/.env.local
