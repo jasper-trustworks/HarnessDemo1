@@ -63,7 +63,7 @@ ADRs live only in `docs/adr/`.)
 | `src/db/schema.ts` | Drizzle schema — single source of truth for the data model |
 | `src/db/client.ts` | Drizzle client singleton (`db`) — import this to query the database |
 | `src/db/migrations/` | Generated SQL migrations — checked in, applied with `npm run db:migrate` |
-| `drizzle.config.ts` | drizzle-kit config (schema path, migrations dir, dialect) |
+| `src/drizzle.config.ts` | drizzle-kit config (schema path, migrations dir, dialect) |
 | `.env.local.example` | Template for local env vars (copy to `.env.local`, gitignored) |
 | `.spec-lite/` | Product definition, domain model, assumptions, feature tracking |
 | `docs/adr/` | Architecture Decision Records (+ index and template) |

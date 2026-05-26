@@ -20,7 +20,7 @@ Two sources of truth, split by topic:
 | `src/db/schema.ts` | Drizzle schema — source of truth for the data model |
 | `src/db/client.ts` | Drizzle client singleton (`db`) |
 | `src/db/migrations/` | Generated SQL migrations, applied with `npm run db:migrate` |
-| `drizzle.config.ts` | drizzle-kit configuration |
+| `src/drizzle.config.ts` | drizzle-kit configuration |
 | `.env.local.example` | Template for local env vars — copy to `.env.local` |
 | `.spec-lite/` | Product definition, domain model (Workspace/List/Task/Member), assumptions, feature tracking |
 | `docs/adr/` | Architecture Decision Records, with index (`README.md`) and `template.md` |

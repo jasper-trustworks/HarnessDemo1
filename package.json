@@ -7,11 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "test": "vitest run --config src/vitest.config.ts",
+    "test:watch": "vitest --config src/vitest.config.ts",
+    "db:generate": "drizzle-kit generate --config src/drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config src/drizzle.config.ts",
+    "db:studio": "drizzle-kit studio --config src/drizzle.config.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
