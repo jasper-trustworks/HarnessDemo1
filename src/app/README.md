@@ -54,7 +54,14 @@ src/app/
 │           └── route.ts             # GET (workspace members)  POST (invite)
 │
 ├── _components/                     # Shared UI components (non-routable)
-│   ├── ui/                          # Primitives: Button, Input, Modal, Badge
+│   ├── ui/                          # Primitives: Button, IconButton, Avatar, AvatarStack,
+│   │   │                            #   Badge, Input, Checkbox, Icon
+│   │   ├── Avatar.tsx
+│   │   ├── Badge.tsx
+│   │   ├── Button.tsx
+│   │   ├── Checkbox.tsx
+│   │   ├── Icon.tsx
+│   │   └── Input.tsx
 │   └── layout/                      # AppShell, Sidebar, Header, Nav
 │
 ├── _hooks/                          # Client-side hooks ('use client' only)
@@ -97,6 +104,58 @@ export async function GET() {
   const lists = await getListsForWorkspace(session.workspaceId)
   return Response.json(lists)
 }
+```
+
+## Design system
+
+Design tokens, typography classes, and component CSS classes all live in `globals.css`. The Todoish handoff source is at `docs/Todoish-handoff.zip`. Full agent constraints are in `CLAUDE.md`.
+
+### Tokens
+
+Use CSS custom properties — never raw hex values.
+
+```css
+color: var(--ink-4);          /* secondary text */
+background: var(--paper);     /* primary canvas #FAFAF7 */
+border: 1px solid var(--border);
+```
+
+### Typography classes
+
+```tsx
+<h1 className="t-display t-italic">Nothing due today.</h1>
+<h2 className="t-h">Q3 planning</h2>
+<p  className="t-body t-muted">No tasks yet.</p>
+<span className="t-label">Today</span>
+<span className="t-mono">2s ago</span>
+```
+
+### UI primitives — import by direct path
+
+```tsx
+import { Button, IconButton }   from '@/app/_components/ui/Button'
+import { Avatar, AvatarStack }  from '@/app/_components/ui/Avatar'
+import { Badge }                from '@/app/_components/ui/Badge'
+import { Input }                from '@/app/_components/ui/Input'
+import { Checkbox }             from '@/app/_components/ui/Checkbox'
+import { Icon }                 from '@/app/_components/ui/Icon'
+```
+
+```tsx
+<Button variant="primary">Add task</Button>
+<Button variant="ghost" size="sm">Cancel</Button>
+<IconButton icon="plus" label="Add task" />
+
+<Badge tone="coral" dot>Live</Badge>
+<Badge tone="cobalt">Selected</Badge>
+<Badge square>v1.2</Badge>
+
+<Avatar name="Maya Chen" size="lg" />
+<AvatarStack people={members} max={4} activeId={currentUserId} />
+
+<Input placeholder="What needs doing" value={v} onChange={…} />
+<Checkbox done={task.done} onChange={setDone} />
+<Icon name="check" size={16} />
 ```
 
 ## Dev commands

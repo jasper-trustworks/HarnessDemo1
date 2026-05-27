@@ -1,24 +1,484 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+/* =========================================================
+   Todoish — Design Tokens
+   ========================================================= */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Paper canvas */
+  --paper:           #FAFAF7;
+  --paper-warm:      #F5F2EB;
+  --paper-deep:      #EDE9DF;
+
+  /* Ink scale (9 steps) */
+  --ink:             #111111;
+  --ink-2:           #1F1F1D;
+  --ink-3:           #3A3A37;
+  --ink-4:           #5A5A55;
+  --ink-5:           #7A7A73;
+  --ink-6:           #9C9C94;
+  --ink-7:           #C2C2B9;
+  --ink-8:           #D9D6CC;
+  --ink-9:           #E8E5DB;
+
+  /* Accents */
+  --coral:           #FF4D6D;
+  --coral-soft:      #FFE5EA;
+  --coral-deep:      #D9304F;
+  --cobalt:          #3D5AFE;
+  --cobalt-soft:     #E1E6FF;
+  --cobalt-deep:     #2A3FCC;
+
+  /* Semantic */
+  --success:         #2E7D5B;
+  --success-soft:    #D9EBE2;
+  --warning:         #C26A1A;
+  --warning-soft:    #F7E6D0;
+  --danger:          #C0392B;
+  --danger-soft:     #F5DAD6;
+
+  /* Structural roles */
+  --bg:              var(--paper);
+  --bg-elevated:     #ffffff;
+  --bg-hover:        var(--ink-9);
+  --bg-pressed:      var(--ink-8);
+  --bg-selected:     var(--cobalt-soft);
+  --fg:              var(--ink);
+  --fg-muted:        var(--ink-4);
+  --fg-subtle:       var(--ink-5);
+  --fg-disabled:     var(--ink-7);
+  --fg-on-ink:       var(--paper);
+  --fg-link:         var(--cobalt);
+  --border:          var(--ink-8);
+  --border-strong:   var(--ink-7);
+  --border-focus:    var(--cobalt);
+
+  /* Fonts — Geist vars injected by next/font; Instrument Serif loaded via @import above */
+  --font-display:    'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --font-sans:       var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:       var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Type scale */
+  --t-mono-xs:       11px;
+  --t-mono-sm:       12px;
+  --t-label:         12px;
+  --t-body-sm:       13px;
+  --t-body:          15px;
+  --t-body-lg:       17px;
+  --t-h-sm:          22px;
+  --t-h:             28px;
+  --t-display-sm:    44px;
+  --t-display:       72px;
+  --t-display-lg:    120px;
+  --t-display-xl:    180px;
+
+  /* Type weights */
+  --w-regular:       400;
+  --w-medium:        500;
+  --w-semibold:      600;
+  --w-bold:          700;
+
+  /* Line height */
+  --lh-tight:        1.05;
+  --lh-snug:         1.15;
+  --lh-normal:       1.45;
+  --lh-relaxed:      1.6;
+
+  /* Letter spacing */
+  --ls-display:      -0.02em;
+  --ls-tight:        -0.01em;
+  --ls-normal:       0;
+  --ls-label:        0.08em;
+
+  /* Spacing (4px base) */
+  --s-1:             4px;
+  --s-2:             8px;
+  --s-3:             12px;
+  --s-4:             16px;
+  --s-5:             20px;
+  --s-6:             24px;
+  --s-8:             32px;
+  --s-10:            40px;
+  --s-12:            48px;
+  --s-16:            64px;
+  --s-20:            80px;
+  --s-24:            96px;
+  --s-32:            128px;
+
+  /* Radii */
+  --r-sm:            6px;
+  --r-md:            10px;
+  --r-lg:            12px;
+  --r-xl:            18px;
+  --r-pill:          999px;
+
+  /* Shadows */
+  --shadow-pop:      0 4px 12px rgba(17, 17, 17, 0.04),
+                     0 12px 32px rgba(17, 17, 17, 0.08);
+  --shadow-lift:     0 8px 24px rgba(17, 17, 17, 0.08),
+                     0 24px 64px rgba(17, 17, 17, 0.12);
+
+  /* Motion */
+  --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:     cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:        120ms;
+  --dur-base:        180ms;
+  --dur-slow:        320ms;
+
+  /* Layout */
+  --sidebar-w:       240px;
+  --content-max:     800px;
+  --marketing-max:   1200px;
+  --row-min-h:       44px;
 }
+
+/* =========================================================
+   Tailwind v4 theme — maps tokens to utilities
+   ========================================================= */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-paper:       var(--paper);
+  --color-paper-warm:  var(--paper-warm);
+  --color-paper-deep:  var(--paper-deep);
+  --color-ink:         var(--ink);
+  --color-ink-2:       var(--ink-2);
+  --color-ink-3:       var(--ink-3);
+  --color-ink-4:       var(--ink-4);
+  --color-ink-5:       var(--ink-5);
+  --color-ink-6:       var(--ink-6);
+  --color-ink-7:       var(--ink-7);
+  --color-ink-8:       var(--ink-8);
+  --color-ink-9:       var(--ink-9);
+  --color-coral:       var(--coral);
+  --color-coral-soft:  var(--coral-soft);
+  --color-coral-deep:  var(--coral-deep);
+  --color-cobalt:      var(--cobalt);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-cobalt-deep: var(--cobalt-deep);
+  --color-success:     var(--success);
+  --color-warning:     var(--warning);
+  --color-danger:      var(--danger);
+  --color-bg:          var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-hover:    var(--bg-hover);
+  --color-bg-selected: var(--bg-selected);
+  --color-border:      var(--border);
+  --font-sans:         var(--font-sans);
+  --font-mono:         var(--font-mono);
+  --font-display:      var(--font-display);
+  --radius-sm:         var(--r-sm);
+  --radius-md:         var(--r-md);
+  --radius-lg:         var(--r-lg);
+  --radius-pill:       var(--r-pill);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* =========================================================
+   Base resets
+   ========================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-normal);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
 }
+
+button { font-family: inherit; }
+a { color: var(--fg-link); }
+::selection { background: var(--ink); color: var(--paper); }
+
+/* =========================================================
+   Typography utility classes
+   ========================================================= */
+
+.t-display-xl,
+.t-display,
+.t-display-sm {
+  font-family: var(--font-display);
+  font-weight: var(--w-regular);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  color: var(--fg);
+}
+.t-display-xl { font-size: var(--t-display-xl); }
+.t-display    { font-size: var(--t-display); }
+.t-display-sm { font-size: var(--t-display-sm); }
+
+.t-italic { font-style: italic; }
+
+.t-h,
+.t-h-sm {
+  font-family: var(--font-sans);
+  font-weight: var(--w-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg);
+}
+.t-h    { font-size: var(--t-h); }
+.t-h-sm { font-size: var(--t-h-sm); }
+
+.t-body-lg,
+.t-body,
+.t-body-sm {
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--ls-normal);
+  color: var(--fg);
+}
+.t-body-lg { font-size: var(--t-body-lg); line-height: var(--lh-relaxed); }
+.t-body    { font-size: var(--t-body); }
+.t-body-sm { font-size: var(--t-body-sm); }
+
+.t-label {
+  font-family: var(--font-sans);
+  font-size: var(--t-label);
+  font-weight: var(--w-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--fg-muted);
+}
+
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-sm);
+  font-weight: var(--w-regular);
+  color: var(--fg-muted);
+  letter-spacing: 0;
+}
+
+.t-mono-xs {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-xs);
+  color: var(--fg-muted);
+}
+
+.t-muted  { color: var(--fg-muted); }
+.t-subtle { color: var(--fg-subtle); }
+.t-link   { color: var(--fg-link); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+/* =========================================================
+   UI Primitives
+   ========================================================= */
+
+/* ----- Buttons ----- */
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--r-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  transition: background var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
+}
+.btn:hover { background: var(--bg-hover); }
+.btn:active { background: var(--bg-pressed); }
+.btn:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn.primary:active { background: var(--ink-3); }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--bg-hover); }
+.btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+.btn.danger:hover { background: #a93224; }
+
+.btn.sm { height: 26px; padding: 0 10px; font-size: 12px; }
+.btn.lg { height: 40px; padding: 0 18px; font-size: 15px; }
+.btn.icon { width: 32px; padding: 0; justify-content: center; }
+.btn.block { width: 100%; justify-content: center; }
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-5);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--paper);
+}
+
+/* ----- Inputs ----- */
+.input {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink);
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  transition: border-color var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+.input:focus {
+  outline: none;
+  border-color: var(--cobalt);
+  box-shadow: 0 0 0 2px var(--cobalt-soft);
+}
+.input::placeholder { color: var(--ink-5); }
+
+/* ----- Avatar ----- */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+}
+.avatar.lg { width: 36px; height: 36px; font-size: 13px; }
+.avatar.xl { width: 56px; height: 56px; font-size: 18px; }
+
+.avatar-stack { display: inline-flex; }
+.avatar-stack .avatar {
+  border: 2px solid var(--paper);
+  margin-left: -8px;
+  box-shadow: 0 0 0 1.5px var(--paper);
+}
+.avatar-stack .avatar:first-child { margin-left: 0; }
+.avatar-stack .avatar.active {
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--coral);
+}
+
+/* ----- Chips / Badges ----- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--ink-9);
+  color: var(--ink-3);
+}
+.chip .dot { width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+.chip.cobalt  { background: var(--cobalt-soft); color: var(--cobalt-deep); }
+.chip.coral   { background: var(--coral-soft); color: var(--coral-deep); }
+.chip.success { background: var(--success-soft); color: var(--success); }
+.chip.warn    { background: var(--warning-soft); color: var(--warning); }
+.chip.danger  { background: var(--danger-soft); color: var(--danger); }
+.chip.ink     { background: var(--ink); color: var(--paper); }
+.chip.outline { background: transparent; border: 1px solid var(--border); color: var(--ink-3); }
+.chip.sq {
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+/* ----- Checkbox (circular, Todoish-style) ----- */
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink-6);
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  flex-shrink: 0;
+  padding: 0;
+}
+.checkbox:hover { border-color: var(--ink-3); }
+.checkbox:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.checkbox.done { background: var(--ink); border-color: var(--ink); }
+
+/* ----- Sync indicator ----- */
+.sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-4);
+}
+.sync-pill .pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--coral);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.sync-pill.synced .pulse { background: var(--success); animation: none; }
+.sync-pill.offline .pulse { background: var(--danger); animation: none; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* ----- Task row ----- */
+.task-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto auto auto;
+  gap: var(--s-3);
+  align-items: center;
+  padding: 10px var(--s-4);
+  min-height: var(--row-min-h);
+  border-bottom: 1px solid var(--ink-8);
+  transition: background var(--dur-base) var(--ease-out);
+  cursor: pointer;
+  position: relative;
+}
+.task-row:hover { background: var(--ink-9); }
+.task-row.selected { background: var(--cobalt-soft); }
+.task-row.selected::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--cobalt);
+}
+.task-row .title { font-size: 15px; color: var(--ink); line-height: 1.4; }
+.task-row .meta  { font-family: var(--font-mono); font-size: 11px; color: var(--ink-5); }
+.task-row.done .title {
+  color: var(--ink-5);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+/* ----- Section eyebrow ----- */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-4);
+}
+
+/* ----- Card / Panel ----- */
+.card  { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--r-lg); }
+.panel { background: var(--bg-elevated); border-radius: var(--r-lg); box-shadow: var(--shadow-pop); }
+
+/* ----- Divider ----- */
+.divider        { height: 1px; background: var(--ink-8); }
+.divider.strong { background: var(--ink-7); }
