@@ -9,27 +9,27 @@ feature implementation starts from here.**
 Two sources of truth, split by topic:
 
 - **Product** scope, domain model, and assumptions → [`.spec-lite/project.md`](.spec-lite/project.md)
-- **Technical / architectural decisions** → [`docs/adr/`](docs/adr/) — the source of truth for *how* the system is built. Other docs reference ADRs rather than restating them.
+- **Technical / architectural decisions** → [`docs/adr/`](docs/adr/) — the source of truth for _how_ the system is built. Other docs reference ADRs rather than restating them.
 - Operating guide for AI agents working in this repo → [`CLAUDE.md`](CLAUDE.md)
 
 ## What's in this repo
 
-| Path | What it is |
-|------|-----------|
-| `src/app/` | Next.js App Router — pages, layouts, Route Handlers |
-| `src/db/schema.ts` | Drizzle schema — source of truth for the data model |
-| `src/db/client.ts` | Drizzle client singleton (`db`) |
-| `src/db/migrations/` | Generated SQL migrations, applied with `npm run db:migrate` |
-| `src/drizzle.config.ts` | drizzle-kit configuration |
-| `.env.local.example` | Template for local env vars — copy to `.env.local` |
-| `.spec-lite/` | Product definition, domain model (Workspace/List/Task/Member), assumptions, feature tracking |
-| `docs/adr/` | Architecture Decision Records, with index (`README.md`) and `template.md` |
-| `docs/architecture/` | C4 overview (System Context + Container diagrams) linking the ADRs |
-| `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions |
-| `.claude/` | Claude Code project settings, enabled plugins, and synced skills |
-| `.devcontainer/` | Dev environment: Dockerfile, `devcontainer.json`, setup scripts |
-| `docker-compose.postgres.yml` | PostgreSQL 17 service for local development |
-| `CLAUDE.md` | Operating guide for AI agents working in this repo |
+| Path                          | What it is                                                                                   |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| `src/app/`                    | Next.js App Router — pages, layouts, Route Handlers                                          |
+| `src/db/schema.ts`            | Drizzle schema — source of truth for the data model                                          |
+| `src/db/client.ts`            | Drizzle client singleton (`db`)                                                              |
+| `src/db/migrations/`          | Generated SQL migrations, applied with `npm run db:migrate`                                  |
+| `src/drizzle.config.ts`       | drizzle-kit configuration                                                                    |
+| `.env.local.example`          | Template for local env vars — copy to `.env.local`                                           |
+| `.spec-lite/`                 | Product definition, domain model (Workspace/List/Task/Member), assumptions, feature tracking |
+| `docs/adr/`                   | Architecture Decision Records, with index (`README.md`) and `template.md`                    |
+| `docs/architecture/`          | C4 overview (System Context + Container diagrams) linking the ADRs                           |
+| `agr.toml` / `agr.lock`       | Declared agent skills and their pinned versions                                              |
+| `.claude/`                    | Claude Code project settings, enabled plugins, and synced skills                             |
+| `.devcontainer/`              | Dev environment: Dockerfile, `devcontainer.json`, setup scripts                              |
+| `docker-compose.postgres.yml` | PostgreSQL 17 service for local development                                                  |
+| `CLAUDE.md`                   | Operating guide for AI agents working in this repo                                           |
 
 ## Getting started
 
@@ -52,15 +52,15 @@ npm run dev
 
 Common scripts:
 
-| Script | What it does |
-|--------|-------------|
-| `npm run dev` | Start Next.js dev server |
-| `npm run build` | Production build (`NODE_ENV=production npm run build`) |
-| `npm test` | Run Vitest once |
-| `npm run test:watch` | Vitest in watch mode |
-| `npm run db:generate` | Generate a new migration from schema changes |
-| `npm run db:migrate` | Apply pending migrations to the database |
-| `npm run db:studio` | Open Drizzle Studio (database browser) |
+| Script                | What it does                                           |
+| --------------------- | ------------------------------------------------------ |
+| `npm run dev`         | Start Next.js dev server                               |
+| `npm run build`       | Production build (`NODE_ENV=production npm run build`) |
+| `npm test`            | Run Vitest once                                        |
+| `npm run test:watch`  | Vitest in watch mode                                   |
+| `npm run db:generate` | Generate a new migration from schema changes           |
+| `npm run db:migrate`  | Apply pending migrations to the database               |
+| `npm run db:studio`   | Open Drizzle Studio (database browser)                 |
 
 ## Tooling & Workflows
 
@@ -90,12 +90,12 @@ and `gitnexus`, plus official plugins (`claude-md-management`, `typescript-lsp`,
 
 ### Development workflows
 
-| To… | Use |
-|-----|-----|
-| Plan and build a feature | `spec-lite` — `/spec-lite:spec` → `/spec-lite:tasks` → `/spec-lite:implement` |
-| Record an architecture / tech decision | the `architecture-decision-records` skill → write an ADR in `docs/adr/` |
-| Review changes before merge | `tw-code-review` |
-| Navigate / understand the codebase | `gitnexus` (knowledge graph; re-index with `npx gitnexus analyze`) |
+| To…                                    | Use                                                                           |
+| -------------------------------------- | ----------------------------------------------------------------------------- |
+| Plan and build a feature               | `spec-lite` — `/spec-lite:spec` → `/spec-lite:tasks` → `/spec-lite:implement` |
+| Record an architecture / tech decision | the `architecture-decision-records` skill → write an ADR in `docs/adr/`       |
+| Review changes before merge            | `tw-code-review`                                                              |
+| Navigate / understand the codebase     | `gitnexus` (knowledge graph; re-index with `npx gitnexus analyze`)            |
 
 ## Development Environment
 
@@ -183,43 +183,46 @@ You can run `git config --global user.name "…"` / `user.email "…"` from insi
 ## Configured Runtimes
 
 | Runtime | Version | Package Manager |
-|---------|---------|-----------------|
-| Node.js | 24 LTS | npm |
-| Python | 3.14 | uv, pip |
-| Bun | latest | bun |
+| ------- | ------- | --------------- |
+| Node.js | 24 LTS  | npm             |
+| Python  | 3.14    | uv, pip         |
+| Bun     | latest  | bun             |
 
 ## Rebuilding the Container
 
 After changing `.devcontainer/` files:
+
 - **VS Code:** `Dev Containers: Rebuild Container` from the command palette
 - **CLI:** `docker build -f .devcontainer/Dockerfile --build-arg PROJECT_NAME=HarnessDemo1 --build-arg INSTALL_BUN=true --build-arg INSTALL_CLAUDE=true -t HarnessDemo1-devcontainer .`
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `.devcontainer/devcontainer.json` | Single source of truth: build args, volumes, extensions, resource limits |
-| `.devcontainer/Dockerfile` | Container image build with conditional runtime installs |
-| `.devcontainer/scripts/post-create.sh` | Runtime setup that runs after container creation |
-| `.devcontainer/scripts/init-firewall.sh` | Egress firewall — runs on every container start via postStartCommand |
-| `.devcontainer/scripts/fetch-marketplaces.sh` | Plugin marketplace fetcher — runs on host via initializeCommand |
-| `.devcontainer/.env.local.example` | Per-developer git-identity template (committed) — copy to `.env.local` |
-| `.devcontainer/.env.local` | Your personal git name/email (gitignored, sourced by post-create.sh) |
-| `.claude/settings.json` | Claude Code config: permission mode, sandbox, marketplaces, plugins |
-| `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions (synced by `agr sync`) |
-| `.spec-lite/project.md` | Product definition, domain model, assumptions, feature tracking |
-| `docs/adr/` | Architecture Decision Records (index + template + accepted ADRs) |
+| File                                          | Purpose                                                                  |
+| --------------------------------------------- | ------------------------------------------------------------------------ |
+| `.devcontainer/devcontainer.json`             | Single source of truth: build args, volumes, extensions, resource limits |
+| `.devcontainer/Dockerfile`                    | Container image build with conditional runtime installs                  |
+| `.devcontainer/scripts/post-create.sh`        | Runtime setup that runs after container creation                         |
+| `.devcontainer/scripts/init-firewall.sh`      | Egress firewall — runs on every container start via postStartCommand     |
+| `.devcontainer/scripts/fetch-marketplaces.sh` | Plugin marketplace fetcher — runs on host via initializeCommand          |
+| `.devcontainer/.env.local.example`            | Per-developer git-identity template (committed) — copy to `.env.local`   |
+| `.devcontainer/.env.local`                    | Your personal git name/email (gitignored, sourced by post-create.sh)     |
+| `.claude/settings.json`                       | Claude Code config: permission mode, sandbox, marketplaces, plugins      |
+| `agr.toml` / `agr.lock`                       | Declared agent skills and their pinned versions (synced by `agr sync`)   |
+| `.spec-lite/project.md`                       | Product definition, domain model, assumptions, feature tracking          |
+| `docs/adr/`                                   | Architecture Decision Records (index + template + accepted ADRs)         |
 
 All configuration changes are made in `devcontainer.json` via `build.args`. The Dockerfile is the build recipe — you normally don't need to edit it.
 
 ## Adding or Removing Runtimes
 
 ### To add a runtime later:
+
 1. Edit `devcontainer.json` → set the relevant `build.args` toggle to `"true"`
 2. For Node.js/Python: add or update the entry in the `features` section
 3. Rebuild the container
 
 ### To remove a runtime:
+
 1. Set its `build.args` toggle to `"false"`
 2. Remove its DevContainer feature entry (if applicable)
 3. Remove related VS Code extensions from `customizations.vscode.extensions`
@@ -245,6 +248,7 @@ The devcontainer includes a whitelist-based egress firewall that blocks all outb
 **Adding custom domains** via `EXTRA_FIREWALL_DOMAINS` in `devcontainer.json` → `containerEnv`:
 
 Format: space-separated fully-qualified domain names (FQDNs).
+
 - Bare domains only — no protocol, port, or path (`maven.mycompany.com` not `https://maven.mycompany.com:443`)
 - Subdomains listed individually — `example.com` does NOT include `sub.example.com`
 - No wildcards — `*.example.com` is not supported (iptables resolves to IPs)
@@ -253,6 +257,7 @@ Format: space-separated fully-qualified domain names (FQDNs).
 // In devcontainer.json → containerEnv
 "EXTRA_FIREWALL_DOMAINS": "maven.mycompany.com nexus.internal.io api.corp.example.com"
 ```
+
 After changing, restart the container (firewall re-runs on every start).
 
 **Azure DevOps** — set `"ALLOW_AZURE_DEVOPS": "true"` in `devcontainer.json` → `build.args` to whitelist `dev.azure.com`, `ssh.dev.azure.com`, and `aex.dev.azure.com`. If your tooling still uses the legacy `<org>.visualstudio.com` URL form, also add that host to `EXTRA_FIREWALL_DOMAINS`.
@@ -279,6 +284,7 @@ Claude Code's native sandbox (bubblewrap) is enabled and provides OS-level files
 - **Native sandbox** (bubblewrap) — restricts Bash writes to allowed paths, blocks access to system files
 
 The sandbox is configured in `.claude/settings.json` → `sandbox` section. Key settings:
+
 - `autoAllowBashIfSandboxed: true` — sandboxed commands execute without permission prompts
 - `failIfUnavailable: true` — hard-fails if sandbox can't start (prevents silent fallback to no protection)
 - `allowWrite` includes `/workspace`, `/tmp`, and all common tool cache dirs (`~/.npm`, `~/.bun`, `~/.cache`, etc.) to prevent tools from failing
@@ -347,6 +353,7 @@ npx gitnexus analyze
 The knowledge graph is persisted in a named volume at `/workspace/.gitnexus` — it survives container rebuilds and only needs re-indexing when code changes significantly.
 
 If the plugin wasn't installed automatically, Claude Code will prompt you on first launch (the marketplace is declared in `.claude/settings.json`). You can also install manually:
+
 ```bash
 claude plugin install gitnexus@gitnexus-tools --scope project
 ```
@@ -407,11 +414,13 @@ The egress firewall blocks all outbound traffic except whitelisted domains. If a
 4. Restart the container (firewall re-runs on every start)
 
 ### Container fails to build
+
 1. Ensure Docker has enough resources (recommend 8GB RAM minimum)
 2. Try `Dev Containers: Rebuild Container Without Cache`
 3. Check build logs for specific errors
 
 ### Permission errors
+
 ```bash
 sudo chown -R vscode:vscode ~/.npm ~/.cache
 ```
@@ -419,6 +428,7 @@ sudo chown -R vscode:vscode ~/.npm ~/.cache
 ### Node.js native module build fails
 
 If you see `gyp ERR!` or similar:
+
 ```bash
 sudo apt-get install -y build-essential python3-dev
 npm rebuild
@@ -427,6 +437,7 @@ npm rebuild
 ### Bun not found after rebuild
 
 Re-run the install:
+
 ```bash
 curl -fsSL https://bun.sh/install | bash
 source ~/.bashrc
@@ -435,6 +446,7 @@ source ~/.bashrc
 ### Python package missing system library
 
 If pip install fails with linking errors:
+
 ```bash
 sudo apt-get install -y lib<name>-dev
 ```

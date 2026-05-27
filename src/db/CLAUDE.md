@@ -5,10 +5,12 @@ Agent instructions for this directory. See `README.md` for the developer overvie
 ## ADR constraints in force
 
 **ADR-0003 (PostgreSQL):**
+
 - All schema changes must go through a reviewed Drizzle migration — no ad-hoc DDL.
 - Use a serverless-safe connection strategy (`max: 1` or a managed pooler) — see `client.ts`.
 
 **ADR-0004 (Drizzle ORM):**
+
 - Route Handlers call repository functions from this directory; they never import `db` and write raw Drizzle queries inline.
 - `schema.ts` is the single source of truth for the data model.
 
@@ -26,13 +28,13 @@ Add repository functions in `src/db/` (one file per domain entity, e.g. `users.t
 
 ## Schema overview
 
-| Table | Key fields | Notes |
-|-------|-----------|-------|
-| `users` | `id`, `email` (unique), `name` | Global user registry |
-| `workspaces` | `id`, `name` | Top-level container |
-| `members` | `userId`, `workspaceId` | Join table; no `updatedAt` — immutable after creation |
-| `lists` | `workspaceId`, `name` | Scoped to workspace; cascade deletes with workspace |
-| `tasks` | `listId`, `title`, `status`, `dueDate?`, `assigneeId?` | `assigneeId` nullable (unassigned is valid); `listId` NOT NULL |
+| Table        | Key fields                                             | Notes                                                          |
+| ------------ | ------------------------------------------------------ | -------------------------------------------------------------- |
+| `users`      | `id`, `email` (unique), `name`                         | Global user registry                                           |
+| `workspaces` | `id`, `name`                                           | Top-level container                                            |
+| `members`    | `userId`, `workspaceId`                                | Join table; no `updatedAt` — immutable after creation          |
+| `lists`      | `workspaceId`, `name`                                  | Scoped to workspace; cascade deletes with workspace            |
+| `tasks`      | `listId`, `title`, `status`, `dueDate?`, `assigneeId?` | `assigneeId` nullable (unassigned is valid); `listId` NOT NULL |
 
 Enum: `task_status` — `"todo" | "in_progress" | "done"`
 

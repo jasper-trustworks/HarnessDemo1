@@ -14,8 +14,7 @@ List; a List belongs to exactly one Workspace). Editing is collaborative, so
 concurrent writes to shared Lists and Tasks must not corrupt state.
 
 PostgreSQL has been the working assumption since project setup — it is already
-provisioned for local development in `docker-compose.postgres.yml` (PostgreSQL
-17) — but the choice has never been recorded as a decision. This ADR captures
+provisioned for local development in `docker-compose.postgres.yml` (PostgreSQL 17) — but the choice has never been recorded as a decision. This ADR captures
 it before data-access code (ADR-0004) is written against it.
 
 The launch scope is modest: assumption A2 holds that one Member belongs to one
@@ -25,15 +24,15 @@ relational, with room to grow.
 
 ## Decision Drivers
 
-* **Relational integrity** — Workspace → List → Task and Member assignments need
+- **Relational integrity** — Workspace → List → Task and Member assignments need
   enforced foreign keys and constraints
-* **Transactional correctness** — collaborative edits require ACID guarantees so
+- **Transactional correctness** — collaborative edits require ACID guarantees so
   concurrent writes stay consistent
-* **Operational simplicity** — a small team should not run more datastores than
+- **Operational simplicity** — a small team should not run more datastores than
   necessary
-* **Ecosystem and hosting fit** — must pair well with Next.js on Vercel and with
+- **Ecosystem and hosting fit** — must pair well with Next.js on Vercel and with
   TypeScript data-access tooling (ADR-0004)
-* **Room to grow** — should absorb future needs (search, flexible attributes,
+- **Room to grow** — should absorb future needs (search, flexible attributes,
   multi-workspace) without a rewrite
 
 ## Considered Options
@@ -103,11 +102,11 @@ data-access decisions (ADR-0004) simple.
 
 ### Risks and mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| Serverless functions exhausting Postgres connections | Use a pooled/serverless driver or a managed pooler (e.g. Vercel Postgres / Neon pooling, PgBouncer) |
-| Schema rigidity slowing early iteration | Use JSONB for genuinely fluid attributes; evolve the relational schema via reviewed migrations (ADR-0004) |
-| Local/production version drift | Pin the major version (17) in `docker-compose.postgres.yml` and in the managed instance |
+| Risk                                                 | Mitigation                                                                                                |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Serverless functions exhausting Postgres connections | Use a pooled/serverless driver or a managed pooler (e.g. Vercel Postgres / Neon pooling, PgBouncer)       |
+| Schema rigidity slowing early iteration              | Use JSONB for genuinely fluid attributes; evolve the relational schema via reviewed migrations (ADR-0004) |
+| Local/production version drift                       | Pin the major version (17) in `docker-compose.postgres.yml` and in the managed instance                   |
 
 ## Related Decisions
 

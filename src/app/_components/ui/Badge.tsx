@@ -16,12 +16,14 @@ interface BadgeProps {
   style?: React.CSSProperties;
 }
 
-export function Badge({ tone = "default", square = false, dot = false, children, style }: BadgeProps) {
-  const cls = [
-    "chip",
-    tone !== "default" ? tone : "",
-    square ? "sq" : "",
-  ]
+export function Badge({
+  tone = "default",
+  square = false,
+  dot = false,
+  children,
+  style,
+}: BadgeProps) {
+  const cls = ["chip", tone !== "default" ? tone : "", square ? "sq" : ""]
     .filter(Boolean)
     .join(" ");
 

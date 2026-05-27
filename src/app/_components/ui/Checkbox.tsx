@@ -16,7 +16,7 @@ export function Checkbox({ done, onChange, size = 18 }: CheckboxProps) {
       style={{ width: size, height: size }}
       onClick={(e) => {
         e.stopPropagation();
-        onChange?.(! done);
+        onChange?.(!done);
       }}
       aria-pressed={done}
       aria-label={done ? "Mark incomplete" : "Mark complete"}

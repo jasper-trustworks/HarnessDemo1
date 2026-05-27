@@ -4,11 +4,11 @@ A secure development container for Node.js + Python + Bun with Docker-in-Docker,
 
 ## Installed Runtimes
 
-| Runtime | Package Manager | Version |
-|---------|-----------------|---------|
-| Node.js | npm | 24 (LTS) |
-| Python | uv, pip | 3.14 |
-| Bun | bun | latest |
+| Runtime | Package Manager | Version  |
+| ------- | --------------- | -------- |
+| Node.js | npm             | 24 (LTS) |
+| Python  | uv, pip         | 3.14     |
+| Bun     | bun             | latest   |
 
 ## Quick Start
 
@@ -36,17 +36,17 @@ All configuration is done in `devcontainer.json` via `build.args`:
 
 ### Installation Toggles
 
-| Build Arg | Current | Description |
-|-----------|---------|-------------|
-| `INSTALL_CLAUDE` | `true` | Install Claude Code CLI |
-| `INSTALL_BUN` | `true` | Install Bun runtime/package manager alongside Node.js |
-| `INSTALL_GITNEXUS` | `true` | Install GitNexus knowledge graph indexer and MCP server |
-| `INSTALL_JETBRAINS` | `false` | Enable JetBrains Gateway support and firewall domain whitelisting |
-| `INSTALL_DOCS_PIPELINE` | `false` | Install Sphinx pipeline system deps (graphviz + JRE + fonts) |
-| `ALLOW_NPM_SCRIPTS` | `true` | Allow NPM to run package scripts automatically |
-| `ALLOW_BUN_SCRIPTS` | `true` | Allow Bun to run lifecycle scripts automatically |
-| `ALLOW_AZURE_DEVOPS` | `false` | Whitelist Azure DevOps hosts in the firewall |
-| `ENABLE_DCT` | `false` | Enable Docker Content Trust (image signature verification) |
+| Build Arg               | Current | Description                                                       |
+| ----------------------- | ------- | ----------------------------------------------------------------- |
+| `INSTALL_CLAUDE`        | `true`  | Install Claude Code CLI                                           |
+| `INSTALL_BUN`           | `true`  | Install Bun runtime/package manager alongside Node.js             |
+| `INSTALL_GITNEXUS`      | `true`  | Install GitNexus knowledge graph indexer and MCP server           |
+| `INSTALL_JETBRAINS`     | `false` | Enable JetBrains Gateway support and firewall domain whitelisting |
+| `INSTALL_DOCS_PIPELINE` | `false` | Install Sphinx pipeline system deps (graphviz + JRE + fonts)      |
+| `ALLOW_NPM_SCRIPTS`     | `true`  | Allow NPM to run package scripts automatically                    |
+| `ALLOW_BUN_SCRIPTS`     | `true`  | Allow Bun to run lifecycle scripts automatically                  |
+| `ALLOW_AZURE_DEVOPS`    | `false` | Whitelist Azure DevOps hosts in the firewall                      |
+| `ENABLE_DCT`            | `false` | Enable Docker Content Trust (image signature verification)        |
 
 ### Runtime Versions (via DevContainer Features)
 
@@ -120,24 +120,24 @@ MARKETPLACES=(
 
 Named volumes persist across container rebuilds, scoped per devcontainer via `${devcontainerId}`:
 
-| Volume | Path | Purpose |
-|--------|------|---------|
-| `npm-cache` | `~/.npm` | NPM package cache |
-| `bun-cache` | `~/.bun` | Bun binary and cache |
-| `uv-cache` | `~/.cache/uv` | UV package cache |
-| `pip-cache` | `~/.cache/pip` | pip package cache |
-| `claude-config` | `~/.claude` | Claude Code config |
-| `claude-cache` | `~/.cache/claude-code` | Claude Code cache |
-| `gitnexus` | `/workspace/.gitnexus` | GitNexus knowledge graph index |
+| Volume          | Path                   | Purpose                        |
+| --------------- | ---------------------- | ------------------------------ |
+| `npm-cache`     | `~/.npm`               | NPM package cache              |
+| `bun-cache`     | `~/.bun`               | Bun binary and cache           |
+| `uv-cache`      | `~/.cache/uv`          | UV package cache               |
+| `pip-cache`     | `~/.cache/pip`         | pip package cache              |
+| `claude-config` | `~/.claude`            | Claude Code config             |
+| `claude-cache`  | `~/.cache/claude-code` | Claude Code cache              |
+| `gitnexus`      | `/workspace/.gitnexus` | GitNexus knowledge graph index |
 
 ## Port Mappings
 
-| Port | Label | Auto-Forward |
-|------|-------|--------------|
-| 3000 | Node.js App | Notify |
-| 5432 | PostgreSQL | Silent |
-| 8000 | Python App | Notify |
-| 9229 | Node.js Debug | Silent |
+| Port | Label         | Auto-Forward |
+| ---- | ------------- | ------------ |
+| 3000 | Node.js App   | Notify       |
+| 5432 | PostgreSQL    | Silent       |
+| 8000 | Python App    | Notify       |
+| 9229 | Node.js Debug | Silent       |
 
 ## Troubleshooting
 
@@ -153,17 +153,21 @@ cat /etc/firewall-domains.conf
 Add missing domains to `EXTRA_FIREWALL_DOMAINS` in `devcontainer.json` → `containerEnv`.
 
 ### Container fails to build
+
 1. Ensure Docker has enough resources (8GB+ RAM)
 2. Try `Dev Containers: Rebuild Container Without Cache`
 3. Check build logs for specific errors
 
 ### Container name conflict
+
 ```bash
 docker rm HarnessDemo1-devcontainer
 ```
+
 Then retry "Reopen in Container".
 
 ### Database connection refused
+
 ```bash
 docker compose -f docker-compose.postgres.yml up -d
 ```

@@ -1,0 +1,20 @@
+.next/
+out/
+node_modules/
+.claude/
+.devcontainer/
+src/db/migrations/
+src/coverage/
+
+# Devcontainer null-device mounts (character special files at workspace root)
+/.bash_profile
+/.bashrc
+/.gitconfig
+/.gitmodules
+/.idea
+/.mcp.json
+/.profile
+/.ripgreprc
+/.vscode
+/.zprofile
+/.zshrc

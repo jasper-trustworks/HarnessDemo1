@@ -26,14 +26,14 @@ team that benefits from low ceremony.
 
 ## Decision Drivers
 
-* **Type safety end to end** — query results should be typed and flow into the
+- **Type safety end to end** — query results should be typed and flow into the
   API contract without hand-maintained types
-* **Migration discipline** — schema changes must be versioned, reviewed, and
+- **Migration discipline** — schema changes must be versioned, reviewed, and
   applied predictably (forward-only, with a rollback story)
-* **Serverless fit** — must work within Postgres connection limits on Vercel
-* **Low ceremony for a small team** — minimise boilerplate and conceptual
+- **Serverless fit** — must work within Postgres connection limits on Vercel
+- **Low ceremony for a small team** — minimise boilerplate and conceptual
   overhead
-* **SQL transparency** — the team should be able to reason about the SQL that
+- **SQL transparency** — the team should be able to reason about the SQL that
   runs, especially as data grows
 
 ## Considered Options
@@ -109,12 +109,12 @@ strategy compatible with serverless Postgres is used (see ADR-0003).
 
 ### Risks and mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| Connection exhaustion on serverless Postgres | Use a serverless/pooled driver or managed pooler as decided in ADR-0003 |
-| Migrations that are hard to roll back | Keep migrations small and forward-only; pair destructive changes with an expand/contract sequence; rehearse on a non-production database |
-| Tool choice churns after code exists | Confine database access to the repository layer so the ORM is swappable behind a stable interface |
-| Drift between TypeScript types and the live schema | Generate types from the schema/migrations as part of the build; fail CI on drift |
+| Risk                                               | Mitigation                                                                                                                               |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Connection exhaustion on serverless Postgres       | Use a serverless/pooled driver or managed pooler as decided in ADR-0003                                                                  |
+| Migrations that are hard to roll back              | Keep migrations small and forward-only; pair destructive changes with an expand/contract sequence; rehearse on a non-production database |
+| Tool choice churns after code exists               | Confine database access to the repository layer so the ORM is swappable behind a stable interface                                        |
+| Drift between TypeScript types and the live schema | Generate types from the schema/migrations as part of the build; fail CI on drift                                                         |
 
 ## Related Decisions
 

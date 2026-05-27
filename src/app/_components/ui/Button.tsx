@@ -23,7 +23,7 @@ export function Button({
   const classes = [
     "btn",
     variant !== "default" ? variant : "",
-    size === "sm" ? "sm" : size === "lg" ? "lg" : "",
+    size !== "md" ? size : "",
     block ? "block" : "",
     className ?? "",
   ]
@@ -43,11 +43,17 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconSize?: number;
 }
 
-export function IconButton({ icon, label, iconSize = 16, className, ...props }: IconButtonProps) {
+export function IconButton({
+  icon,
+  label,
+  iconSize = 16,
+  className,
+  ...props
+}: IconButtonProps) {
   return (
     <button
       type="button"
-      className={`btn icon${className ? ` ${className}` : ""}`}
+      className={["btn", "icon", className].filter(Boolean).join(" ")}
       title={label}
       aria-label={label}
       {...props}
