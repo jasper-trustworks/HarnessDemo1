@@ -24,7 +24,12 @@
       "WebFetch(domain:cli.github.com)",
       "Skill(commit-commands)"
     ],
-    "deny": [],
+    "deny": [
+      "Read(**/.next/**)",
+      "Read(src/coverage/**)",
+      "Read(**/*.tsbuildinfo)",
+      "Edit(src/db/migrations/**)"
+    ],
     "defaultMode": "auto"
   },
   "sandbox": {
@@ -108,6 +113,43 @@
             "command": "export PATH=\"$HOME/.local/bin:$PATH\"; command -v agr >/dev/null 2>&1 && agr sync >/dev/null 2>&1 || true",
             "timeout": 120,
             "statusMessage": "Syncing agent skills (agr sync)…"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/format-edited-file.sh\"",
+            "timeout": 30,
+            "statusMessage": "Formatting edited file (prettier)…"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-push-verify.sh\"",
+            "timeout": 300,
+            "statusMessage": "Checking for git push (verifies before pushing)…"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-ci-reminder.sh\"",
+            "timeout": 20
           }
         ]
       }

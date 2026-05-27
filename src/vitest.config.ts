@@ -10,6 +10,12 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    // Unit tests are co-located in src and named *.test.ts(x) (ADR-0007). Scoping
+    // include here keeps vitest from globbing the Playwright e2e/*.spec.ts files
+    // (which crash under vitest). Integration tests use a separate config.
+    include: ["src/**/*.test.{ts,tsx}"],
+    // Don't fail the run (or the pre-push gate / CI) before any unit tests exist.
+    passWithNoTests: true,
     coverage: {
       provider: "v8",
       reporter: ["lcov", "text"],
