@@ -21,27 +21,35 @@ decision, its rationale, and its constraints. A C4 overview of how these fit tog
 
 ## Key Conventions
 
-None established yet.
+Established during the `workspace` feature (see co-located `CLAUDE.md` files for full detail):
+
+- **Repository pattern** — Route Handlers call repository functions in `src/db/`; never import `db` directly in a route file.
+- **Route handler shape** — parse → call repository → respond. No business logic inline.
+- **Auth guard** — call `getRequiredSession()` at the top of every authenticated Route Handler or Server Component; always derive `workspaceId` from the session, never from the request.
+- **Test co-location** — unit tests as `*.test.ts` alongside source; integration tests as `*.integration.test.ts` (require a separate vitest config and a live DB).
 
 ## Domain Concepts
 
-| Term      | Definition                                                                   |
-| --------- | ---------------------------------------------------------------------------- |
-| Workspace | Top-level container scoped to a team or organization; members share access   |
-| List      | Named collection of tasks within a workspace (e.g. "Shopping", "Work tasks") |
-| Task      | Individual to-do item with title, status, optional due date and assignee     |
-| Member    | User who belongs to a workspace and can view/edit its lists and tasks        |
+| Term      | Definition                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------ |
+| Workspace | Top-level container scoped to a team or organization; members share access                 |
+| List      | Named collection of tasks within a workspace (e.g. "Shopping", "Work tasks")               |
+| Task      | Individual to-do item with title, status, optional due date and assignee                   |
+| Member    | User who belongs to a workspace and can view/edit its lists and tasks                      |
+| User      | Registered account in the system; each user owns exactly one workspace at launch           |
+| Session   | Authenticated context for a request: `{ userId, workspaceId }` — derived from Auth.js auth |
 
 ## Assumptions
 
-| #   | Assumption                                                        | Risk   | Status |
-| --- | ----------------------------------------------------------------- | ------ | ------ |
-| A1  | Next.js can handle real-time collaboration (polling or WebSocket) | high   | open   |
-| A2  | One user belongs to one workspace — no multi-tenancy at launch    | medium | open   |
-| A3  | Tasks don't need sub-tasks or dependencies at launch              | low    | open   |
+| #   | Assumption                                                        | Risk   | Status              |
+| --- | ----------------------------------------------------------------- | ------ | ------------------- |
+| A1  | Next.js can handle real-time collaboration (polling or WebSocket) | high   | open                |
+| A2  | One user belongs to one workspace — no multi-tenancy at launch    | medium | partially validated |
+| A3  | Tasks don't need sub-tasks or dependencies at launch              | low    | open                |
 
 ## Active Features
 
-| Feature    | Phase | Tasks Done |
-| ---------- | ----- | ---------- |
-| (none yet) | —     | —          |
+| Feature      | Phase | Tasks Done |
+| ------------ | ----- | ---------- |
+| workspace    | done  | 4          |
+| workspace-ui | spec  | 0          |
