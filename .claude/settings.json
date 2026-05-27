@@ -28,7 +28,8 @@
       "Read(**/.next/**)",
       "Read(src/coverage/**)",
       "Read(**/*.tsbuildinfo)",
-      "Edit(src/db/migrations/**)"
+      "Edit(src/db/migrations/**)",
+      "Write(src/db/migrations/**)"
     ],
     "defaultMode": "auto"
   },
