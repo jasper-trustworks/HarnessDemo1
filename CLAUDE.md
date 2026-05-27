@@ -35,22 +35,9 @@ Other documents — including `.spec-lite/project.md` — **reference** ADRs rat
 their content. Do not duplicate a decision's rationale or constraints outside its ADR; link to
 the ADR instead. If any document ever conflicts with an accepted ADR, the ADR wins.
 
-Constraints already in force:
-
-**ADR-0001 (Next.js App Router)**
-- Default every component to a **Server Component**; add `'use client'` only when you need
-  event handlers or browser APIs.
-- Use `cache: 'no-store'` for authenticated routes; add caching explicitly and deliberately.
-- Pin the Next.js **minor** version in CI; review the changelog before upgrading.
-
-**ADR-0003 (PostgreSQL)**
-- All schema changes must go through a reviewed Drizzle migration — no ad-hoc DDL.
-- Use a serverless-safe connection strategy (`max: 1` or a managed pooler) — see `src/db/client.ts`.
-
-**ADR-0004 (Drizzle ORM)**
-- Route Handlers call the repository/data-access layer; they never issue raw SQL inline.
-- `src/db/schema.ts` is the single source of truth for the data model; generate migrations
-  with `npm run db:generate` and apply them with `npm run db:migrate`.
+Constraints are documented co-located with the code they govern:
+- **App layer** (Next.js, routing, components) → [`src/app/CLAUDE.md`](src/app/CLAUDE.md)
+- **Database layer** (PostgreSQL, Drizzle, migrations) → [`src/db/CLAUDE.md`](src/db/CLAUDE.md)
 
 (Note: a leftover `.architecture/` directory exists from an abandoned experiment — ignore it.
 ADRs live only in `docs/adr/`.)
@@ -59,10 +46,8 @@ ADRs live only in `docs/adr/`.)
 
 | Path | What it is |
 |------|-----------|
-| `src/app/` | Next.js App Router — pages, layouts, Route Handlers |
-| `src/db/schema.ts` | Drizzle schema — single source of truth for the data model |
-| `src/db/client.ts` | Drizzle client singleton (`db`) — import this to query the database |
-| `src/db/migrations/` | Generated SQL migrations — checked in, applied with `npm run db:migrate` |
+| `src/app/` | Next.js App Router — pages, layouts, Route Handlers — see [`src/app/README.md`](src/app/README.md) |
+| `src/db/` | Database layer: schema, client, migrations — see [`src/db/README.md`](src/db/README.md) |
 | `src/drizzle.config.ts` | drizzle-kit config (schema path, migrations dir, dialect) |
 | `.env.local.example` | Template for local env vars (copy to `.env.local`, gitignored) |
 | `.spec-lite/` | Product definition, domain model, assumptions, feature tracking |
@@ -122,11 +107,8 @@ Full detail lives in `README.md`; the rules that affect how you run commands:
 - Honor the installed skills — especially `clean-code`, `react-best-practices`, and
   `backend-dev-guidelines` — rather than reinventing patterns.
 
-**Established conventions:**
-- `src/db/schema.ts` — all table/enum definitions live here; never define schema inline.
-- `src/db/` — data-access layer; Route Handlers import `db` from `src/db/client.ts` and call
-  repository functions, never raw Drizzle queries in request handlers.
-- `src/app/api/` — Route Handlers only; no business logic, only parse → call repository → respond.
-- `src/app/` pages default to Server Components; add `'use client'` only for interactivity.
+Area-specific conventions live co-located with each directory:
+- `src/app/CLAUDE.md` — Next.js component, routing, and Route Handler patterns
+- `src/db/CLAUDE.md` — schema, migration workflow, and repository patterns
 
 See `README.md` for full environment setup, Claude Code authentication, and troubleshooting.
