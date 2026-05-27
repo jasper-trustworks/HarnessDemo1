@@ -25,13 +25,7 @@
       "Skill(commit-commands)"
     ],
     "deny": [],
-    "defaultMode": "auto",
-    "autoMode": {
-      "environment": [
-        "$defaults",
-        "Source control: github.com/jasper-trustworks and all repos under it are trusted; pushing the project's source there is authorized"
-      ]
-    }
+    "defaultMode": "auto"
   },
   "sandbox": {
     "enabled": true,
