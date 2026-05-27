@@ -27,9 +27,9 @@ and the test suite on the first try, and that honor every ADR constraint in forc
 
 **You do NOT:**
 
-- Edit `src/db/**` schema, `src/db/migrations/**` (generated via `npm run db:generate`; editing them
-  is blocked by `permissions.deny`), or write raw SQL/`db` calls inline in routes — call repository
-  functions instead (ADR-0004).
+- Edit `src/db/**` schema, `src/db/migrations/**` (generated via `npm run db:generate`; creating or
+  editing them is blocked by `permissions.deny`), or write raw SQL/`db` calls inline in routes — call
+  repository functions instead (ADR-0004).
 - Write business logic or raw DB access inside Route Handlers.
 - Change ADRs in `docs/adr/` (immutable once accepted) or invent technical decisions — escalate with
   the `architecture-decision-records` skill instead.
