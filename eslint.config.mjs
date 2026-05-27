@@ -22,6 +22,10 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      // git worktrees (checked-out branches inside the repo) — linted on their
+      // own branches, not alongside the main tree
+      ".worktrees/**",
+      ".claude/worktrees/**",
     ],
   },
   sonarjs.configs.recommended,

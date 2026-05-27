@@ -11,6 +11,13 @@
 # Claude — SessionStart agr-sync diagnostics log (runtime output, not source)
 .claude/logs/
 
+# git worktrees — checked-out branches living inside the repo (created by
+# `git worktree add`: Claude sessions under .claude/worktrees/, feature worktrees
+# under .worktrees/). Their files are tracked on their own branches, never in the
+# main tree, and must not be linted/formatted/tested alongside it.
+.claude/worktrees/
+/.worktrees/
+
 # Next.js
 .next/
 out/

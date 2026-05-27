@@ -6,6 +6,10 @@ node_modules/
 src/db/migrations/
 src/coverage/
 
+# git worktrees (checked-out branches inside the repo) — formatted on their own
+# branches, not with the main tree (.claude/ above already covers .claude/worktrees/)
+/.worktrees/
+
 # Devcontainer null-device mounts (character special files at workspace root)
 /.bash_profile
 /.bashrc
