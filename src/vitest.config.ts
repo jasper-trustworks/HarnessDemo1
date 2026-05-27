@@ -7,6 +7,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      "@": __dirname,
+    },
+  },
   test: {
     environment: "jsdom",
     globals: true,
@@ -14,6 +19,7 @@ export default defineConfig({
     // include here keeps vitest from globbing the Playwright e2e/*.spec.ts files
     // (which crash under vitest). Integration tests use a separate config.
     include: ["src/**/*.test.{ts,tsx}"],
+    exclude: ["src/**/*.integration.test.{ts,tsx}"],
     // Don't fail the run (or the pre-push gate / CI) before any unit tests exist.
     passWithNoTests: true,
     coverage: {

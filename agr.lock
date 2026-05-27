@@ -5,132 +5,132 @@ version = 1
 [[skill]]
 handle = "vercel-labs/agent-skills/react-best-practices"
 source = "github"
-commit = "18a24346600009dc3fcb99e4b2cd83b301601775"
+commit = "180115660cfb8a86b808f117475a01f54caf3bc5"
 content-hash = "sha256:09c52b8e87089173edfcebaae10b4ba42dde26944ab04f75dd69eed8bf98ec16"
 installed-name = "react-best-practices"
 
 [[skill]]
 handle = "vercel-labs/agent-skills/composition-patterns"
 source = "github"
-commit = "18a24346600009dc3fcb99e4b2cd83b301601775"
+commit = "180115660cfb8a86b808f117475a01f54caf3bc5"
 content-hash = "sha256:9c0777d7cec86b50a4e5a34db98db366340798e6e8a8a810fbf5b37308ca71fd"
 installed-name = "composition-patterns"
 
 [[skill]]
 handle = "vercel-labs/agent-skills/web-design-guidelines"
 source = "github"
-commit = "18a24346600009dc3fcb99e4b2cd83b301601775"
+commit = "180115660cfb8a86b808f117475a01f54caf3bc5"
 content-hash = "sha256:f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
 installed-name = "web-design-guidelines"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/react-component-performance"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:47640942a79a754bcb1f8202d7b344f7901927474b26686d5ba16e33ee943820"
 installed-name = "react-component-performance"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/backend-dev-guidelines"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:f2448646dac700d1b96c2047241e633751ef2961f946b9bf4c25ea07db3e93e5"
 installed-name = "backend-dev-guidelines"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/database-migrations-sql-migrations"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:83bc2694cdfad8a876fb7ff8aa3c9581b99ffc8650bf4814a57523783851c018"
 installed-name = "database-migrations-sql-migrations"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/postgresql-optimization"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:e97d27e720d004cd79f30d2f2a41ccb7876283e5895ffefaf7a498f2c449302f"
 installed-name = "postgresql-optimization"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/e2e-testing-patterns"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:f31fb3571c97147f26ed5f143db2749d7000862d648831e48ff347bff354c824"
 installed-name = "e2e-testing-patterns"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/error-handling-patterns"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:9e8e82786adc7cac96356d687cbde83136f4de4b752cd123a1d22e9afd9118e6"
 installed-name = "error-handling-patterns"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/api-security-best-practices"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:8754f489b008d8ba0679828360165ef426d5dfde55638c069f886eeab82c8dd1"
 installed-name = "api-security-best-practices"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/architecture-patterns"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:2d2cba430a37db3088b0670748d899040710af3879669551c3cd59ff1865d2b3"
 installed-name = "architecture-patterns"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/clean-code"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:c5825232bbb81729cd1e198ed3fc0d031763d3c9da6f32c9ba0fcefada487cf5"
 installed-name = "clean-code"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/architecture-decision-records"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:2c1ce7beff68489ff7b4a1ef1cfc861eb26656fa1853077c199fdbcb61b5f435"
 installed-name = "architecture-decision-records"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/domain-driven-design"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:9b12a00227906a62b26fc1b666bf955190bd9de151a9055fa90dc7434a5b9dcb"
 installed-name = "domain-driven-design"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/ddd-tactical-patterns"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:b663b4ba98b522d87e246c4f0f184b556260231c4e6c4ee4153c6d01c0ebd744"
 installed-name = "ddd-tactical-patterns"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/auth-implementation-patterns"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:8ae8d81edd79a84737db2bce3ce3bc81425d0aa4a7f8e778286ba6ffe671446c"
 installed-name = "auth-implementation-patterns"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/api-design-principles"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:3a68371be5d64f53c09779668d62495c670d661bb2c388551fac47eea3b45219"
 installed-name = "api-design-principles"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/accessibility-compliance-accessibility-audit"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:9d15d9fc6d483f327632111511e448961bfce7606d7529feba38bd8947f9db6e"
 installed-name = "accessibility-compliance-accessibility-audit"
 
 [[skill]]
 handle = "sickn33/antigravity-awesome-skills/c4-architecture-c4-architecture"
 source = "github"
-commit = "fb50cb37363d5f4babc97e92eb41805fadd07b9e"
+commit = "cb8a3ab6eaba15570a81ef729d0e7d38a840e338"
 content-hash = "sha256:6a153ac0a318e1002a61d7a8aa6d4692bae5622c8f2645730ed373e562aff914"
 installed-name = "c4-architecture-c4-architecture"
