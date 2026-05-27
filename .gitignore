@@ -11,6 +11,10 @@
 # Claude — SessionStart agr-sync diagnostics log (runtime output, not source)
 .claude/logs/
 
+# Claude — git worktrees created by EnterWorktree (live under the bind mount so
+# they persist + stay sandbox-writable; never committed to the main tree)
+.claude/worktrees/
+
 # Next.js
 .next/
 out/

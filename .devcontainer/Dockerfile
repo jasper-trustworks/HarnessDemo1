@@ -23,6 +23,9 @@ ARG ALLOW_NPM_SCRIPTS="true"
 ARG ALLOW_BUN_SCRIPTS="true"
 ARG ALLOW_AZURE_DEVOPS="false"
 ARG ENABLE_DCT="false"
+ARG INSTALL_AGENT_DECK="false"
+# Agent Deck release to pin (https://github.com/asheshgoplani/agent-deck/releases).
+ARG AGENT_DECK_VERSION="1.9.38"
 
 # Git identity is passed via containerEnv in devcontainer.json (not build args)
 # to avoid leaking PII into image layers. post-create.sh reads it at runtime.
@@ -43,6 +46,8 @@ ARG ALLOW_NPM_SCRIPTS
 ARG ALLOW_BUN_SCRIPTS
 ARG ALLOW_AZURE_DEVOPS
 ARG ENABLE_DCT
+ARG INSTALL_AGENT_DECK
+ARG AGENT_DECK_VERSION
 
 # Store build args as environment variables for runtime scripts.
 ENV PROJECT_NAME=${PROJECT_NAME} \
@@ -54,7 +59,8 @@ ENV PROJECT_NAME=${PROJECT_NAME} \
     ALLOW_NPM_SCRIPTS=${ALLOW_NPM_SCRIPTS} \
     ALLOW_BUN_SCRIPTS=${ALLOW_BUN_SCRIPTS} \
     ALLOW_AZURE_DEVOPS=${ALLOW_AZURE_DEVOPS} \
-    ENABLE_DCT=${ENABLE_DCT}
+    ENABLE_DCT=${ENABLE_DCT} \
+    INSTALL_AGENT_DECK=${INSTALL_AGENT_DECK}
 
 # -----------------------------------------------------------------------------
 # System Setup
@@ -171,6 +177,32 @@ RUN if [ "${INSTALL_DOCS_PIPELINE}" = "true" ]; then \
     fonts-dejavu-core \
     default-jre-headless && \
     apt-get clean -y && rm -rf /var/lib/apt/lists/*; \
+    fi
+
+# -----------------------------------------------------------------------------
+# Agent Deck (Conditional)
+# TUI terminal-session manager for AI coding agents (https://github.com/asheshgoplani/agent-deck).
+# Installs the pinned release binary system-wide to /usr/local/bin and its runtime
+# dependency tmux (jq is already installed in the base layer). The checksum is
+# verified against the release's checksums.txt. Flip INSTALL_AGENT_DECK=true in
+# devcontainer.json build.args and rebuild to enable.
+# -----------------------------------------------------------------------------
+RUN if [ "${INSTALL_AGENT_DECK}" = "true" ]; then \
+    set -eux && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends tmux && \
+    apt-get clean -y && rm -rf /var/lib/apt/lists/* && \
+    arch="$(dpkg --print-architecture)" && \
+    base="https://github.com/asheshgoplani/agent-deck/releases/download/v${AGENT_DECK_VERSION}" && \
+    tarball="agent-deck_${AGENT_DECK_VERSION}_linux_${arch}.tar.gz" && \
+    tmp="$(mktemp -d)" && \
+    curl -fsSL "${base}/${tarball}" -o "${tmp}/${tarball}" && \
+    curl -fsSL "${base}/checksums.txt" -o "${tmp}/checksums.txt" && \
+    ( cd "${tmp}" && sha256sum --check --ignore-missing checksums.txt ) && \
+    tar -xzf "${tmp}/${tarball}" -C "${tmp}" agent-deck && \
+    install -m 0755 "${tmp}/agent-deck" /usr/local/bin/agent-deck && \
+    rm -rf "${tmp}" && \
+    agent-deck --version; \
     fi
 
 # -----------------------------------------------------------------------------

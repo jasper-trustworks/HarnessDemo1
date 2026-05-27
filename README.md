@@ -29,6 +29,7 @@ Two sources of truth, split by topic:
 | `.claude/`                    | Claude Code project settings, enabled plugins, and synced skills                             |
 | `.devcontainer/`              | Dev environment: Dockerfile, `devcontainer.json`, setup scripts                              |
 | `docker-compose.postgres.yml` | PostgreSQL 17 service for local development                                                  |
+| `scripts/`                    | Repo helper scripts (`verify-push.sh`, `worktree-bootstrap.sh`)                              |
 | `CLAUDE.md`                   | Operating guide for AI agents working in this repo                                           |
 
 ## Getting started
@@ -197,19 +198,20 @@ After changing `.devcontainer/` files:
 
 ## Configuration Files
 
-| File                                          | Purpose                                                                  |
-| --------------------------------------------- | ------------------------------------------------------------------------ |
-| `.devcontainer/devcontainer.json`             | Single source of truth: build args, volumes, extensions, resource limits |
-| `.devcontainer/Dockerfile`                    | Container image build with conditional runtime installs                  |
-| `.devcontainer/scripts/post-create.sh`        | Runtime setup that runs after container creation                         |
-| `.devcontainer/scripts/init-firewall.sh`      | Egress firewall — runs on every container start via postStartCommand     |
-| `.devcontainer/scripts/fetch-marketplaces.sh` | Plugin marketplace fetcher — runs on host via initializeCommand          |
-| `.devcontainer/.env.local.example`            | Per-developer git-identity template (committed) — copy to `.env.local`   |
-| `.devcontainer/.env.local`                    | Your personal git name/email (gitignored, sourced by post-create.sh)     |
-| `.claude/settings.json`                       | Claude Code config: permission mode, sandbox, marketplaces, plugins      |
-| `agr.toml` / `agr.lock`                       | Declared agent skills and their pinned versions (synced by `agr sync`)   |
-| `.spec-lite/project.md`                       | Product definition, domain model, assumptions, feature tracking          |
-| `docs/adr/`                                   | Architecture Decision Records (index + template + accepted ADRs)         |
+| File                                          | Purpose                                                                     |
+| --------------------------------------------- | --------------------------------------------------------------------------- |
+| `.devcontainer/devcontainer.json`             | Single source of truth: build args, volumes, extensions, resource limits    |
+| `.devcontainer/Dockerfile`                    | Container image build with conditional runtime installs                     |
+| `.devcontainer/scripts/post-create.sh`        | Runtime setup that runs after container creation                            |
+| `.devcontainer/scripts/init-firewall.sh`      | Egress firewall — runs on every container start via postStartCommand        |
+| `.devcontainer/scripts/fetch-marketplaces.sh` | Plugin marketplace fetcher — runs on host via initializeCommand             |
+| `.devcontainer/.env.local.example`            | Per-developer git-identity template (committed) — copy to `.env.local`      |
+| `.devcontainer/.env.local`                    | Your personal git name/email (gitignored, sourced by post-create.sh)        |
+| `scripts/worktree-bootstrap.sh`               | Makes a fresh git worktree runnable (`.env.local` + `npm ci` + optional DB) |
+| `.claude/settings.json`                       | Claude Code config: permission mode, sandbox, marketplaces, plugins         |
+| `agr.toml` / `agr.lock`                       | Declared agent skills and their pinned versions (synced by `agr sync`)      |
+| `.spec-lite/project.md`                       | Product definition, domain model, assumptions, feature tracking             |
+| `docs/adr/`                                   | Architecture Decision Records (index + template + accepted ADRs)            |
 
 All configuration changes are made in `devcontainer.json` via `build.args`. The Dockerfile is the build recipe — you normally don't need to edit it.
 
@@ -321,6 +323,40 @@ Connection: `postgresql://postgres:postgres@localhost:5432/app_db`
 Set `DATABASE_URL` in `.env.local` to this value. Run `npm run db:migrate` after starting
 PostgreSQL to apply schema migrations. `npm run db:studio` opens a browser-based database
 browser (Drizzle Studio).
+
+## Git Worktrees
+
+Worktrees let you keep several branches checked out at once (e.g. for parallel features or
+agent fan-out). One devcontainer rule overrides the usual habits:
+
+> **Keep worktrees under `/workspace`.** Only `/workspace` is bind-mounted from the host
+> (`workspaceMount` in `devcontainer.json`) and only `/workspace`, `/tmp`, and tool caches are
+> sandbox-writable. A sibling-directory worktree (`git worktree add ../foo`) lands in the
+> container's ephemeral overlay — lost on rebuild and blocked by the sandbox.
+
+Claude Code's `EnterWorktree` already does the right thing: it creates worktrees in
+`.claude/worktrees/` (inside the bind mount), which is gitignored so they never show up in the
+main tree's status. You can also create one by hand with
+`git worktree add .claude/worktrees/<name> -b <branch>`.
+
+A fresh worktree shares git history but **not** gitignored artifacts (`node_modules`,
+`.env.local`, `.next`). Make it runnable from inside the worktree:
+
+```bash
+scripts/worktree-bootstrap.sh            # seed .env.local + npm ci  (shares the single app_db)
+scripts/worktree-bootstrap.sh --db       # + a dedicated DB auto-named from the branch, migrated
+scripts/worktree-bootstrap.sh --db NAME  # + a dedicated DB with an explicit name
+```
+
+Things shared across all worktrees in one container — plan around the collisions:
+
+- **PostgreSQL** — one container, one `app_db` on `5432`. Use `--db` when a worktree has
+  migrations that would diverge from the others; otherwise the shared DB is fine.
+- **Dev server port** — only one listener on `3000`. Start the second with `PORT=3001 npm run dev`.
+- **npm/bun caches** — shared named volumes, so `npm ci` in a new worktree is fast.
+
+Clean up with `git worktree remove .claude/worktrees/<name>` (or `ExitWorktree`), and
+`/clean_gone` removes branches deleted on the remote along with their worktrees.
 
 ## Bun
 

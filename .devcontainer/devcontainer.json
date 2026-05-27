@@ -14,6 +14,11 @@
       "ALLOW_NPM_SCRIPTS": "true",
       "ALLOW_BUN_SCRIPTS": "true",
 
+      // Agent Deck — TUI session manager for AI coding agents. Installs the pinned
+      // release binary (+ tmux) at build time. Bump AGENT_DECK_VERSION to upgrade.
+      "INSTALL_AGENT_DECK": "true",
+      "AGENT_DECK_VERSION": "1.9.38",
+
       // Azure DevOps support — adds dev.azure.com, ssh.dev.azure.com,
       // aex.dev.azure.com to the firewall whitelist. Set to "true" if your
       // project uses Azure DevOps for source control or pipelines.

@@ -103,6 +103,11 @@ Full detail lives in `README.md`; the rules that affect how you run commands:
   Apply migrations before running the app: `npm run db:migrate`.
 - **`NODE_ENV` quirk:** the devcontainer sets `NODE_ENV=development` globally. Pass
   `NODE_ENV=production npm run build` explicitly for production builds.
+- **Git worktrees:** create them **under `/workspace` only** — sibling dirs (`../foo`) fall
+  outside the bind mount and the sandbox write-allowlist. `EnterWorktree` does this correctly
+  (it uses `.claude/worktrees/`, which is gitignored). After creating one, make it runnable
+  from inside it with `scripts/worktree-bootstrap.sh` (`--db` for an isolated database when
+  migrations would diverge); the second dev server needs `PORT=3001`. See README → Git Worktrees.
 
 ## Coding conventions
 
