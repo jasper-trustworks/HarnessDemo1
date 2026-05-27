@@ -47,6 +47,9 @@ All configuration is done in `devcontainer.json` via `build.args`:
 | `ALLOW_BUN_SCRIPTS`     | `true`  | Allow Bun to run lifecycle scripts automatically                  |
 | `ALLOW_AZURE_DEVOPS`    | `false` | Whitelist Azure DevOps hosts in the firewall                      |
 | `ENABLE_DCT`            | `false` | Enable Docker Content Trust (image signature verification)        |
+| `INSTALL_AGENT_DECK`    | `true`  | Install [agent-deck](https://github.com/asheshgoplani/agent-deck) (TUI session manager for AI agents) + tmux |
+
+> `INSTALL_AGENT_DECK` pins the release via the `AGENT_DECK_VERSION` build arg (currently `1.9.38`). The binary is checksum-verified and installed to `/usr/local/bin/agent-deck`; its `tmux` dependency is installed in the same step (`jq` is already in the base image). Run `agent-deck` to launch it.
 
 ### Runtime Versions (via DevContainer Features)
 
