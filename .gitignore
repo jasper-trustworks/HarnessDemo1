@@ -8,6 +8,9 @@
 # agr.toml, pinned by agr.lock); not vendored into the repo
 .claude/skills/
 
+# Claude — SessionStart agr-sync diagnostics log (runtime output, not source)
+.claude/logs/
+
 # Next.js
 .next/
 out/
