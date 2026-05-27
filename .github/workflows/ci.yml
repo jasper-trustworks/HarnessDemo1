@@ -44,16 +44,20 @@ jobs:
         run: npm run test:coverage
 
       - name: Normalize SONAR_HOST_URL
+        if: ${{ secrets.SONAR_HOST_URL != '' }}
         run: |
           URL="$SONAR_HOST_URL"
-          if [[ -n "$URL" && "$URL" != http://* && "$URL" != https://* ]]; then
+          if [[ "$URL" != http://* && "$URL" != https://* ]]; then
             echo "SONAR_HOST_URL=https://$URL" >> "$GITHUB_ENV"
+          else
+            echo "SONAR_HOST_URL=$URL" >> "$GITHUB_ENV"
           fi
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: SonarQube scan
+        if: ${{ secrets.SONAR_TOKEN != '' && secrets.SONAR_HOST_URL != '' }}
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL || secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
