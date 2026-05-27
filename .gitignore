@@ -1,3 +1,6 @@
+# Git worktrees (created locally by `git worktree add`)
+.worktrees/
+
 # DevContainer — plugin marketplace repos (content baked into image, git history not needed)
 .devcontainer/.plugin-marketplace/
 
