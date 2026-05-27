@@ -191,6 +191,25 @@ const TaskList = {
 };
 ```
 
+## Testing (ADR-0007)
+
+Three test layers apply to code in this directory:
+
+| What to test                                        | Layer       | Tool       | Where                                          |
+| --------------------------------------------------- | ----------- | ---------- | ---------------------------------------------- |
+| Pure functions, utilities, isolated component logic | Unit        | Vitest     | `*.test.ts(x)` co-located with source          |
+| Route Handler correctness against a real database   | Integration | Vitest     | `*.integration.test.ts` co-located with source |
+| User journeys through the full Next.js UI           | E2E         | Playwright | `e2e/*.spec.ts` at repo root                   |
+
+**When to write an E2E test:** any user-facing flow that spans at least one page navigation or form submission. One spec per feature area (e.g. `e2e/lists.spec.ts`, `e2e/tasks.spec.ts`).
+
+**Playwright conventions for this codebase:**
+
+- Use role-based locators: `page.getByRole('button', { name: 'Add task' })` over CSS selectors.
+- Assert with `expect(locator).toBeVisible()` — never `page.waitForTimeout()`.
+- The E2E test server runs on port 3001 with `DATABASE_URL` pointing at `app_db_test`. Fixture data (workspace, user, list, task) is seeded by `e2e/global-setup.ts` with fixed UUIDs prefixed `e2e00000-…`.
+- Use `process.env.E2E_TEST === 'true'` inside the Next.js app to gate test-only behavior (e.g. bypassing OAuth in auth flows). Never let this flag reach production — guard it with `if (process.env.NODE_ENV !== 'production')`.
+
 ## Relevant skills
 
 - `react-best-practices` — Server/Client component patterns, parallel data fetching, bundle optimization
@@ -199,3 +218,4 @@ const TaskList = {
 - `web-design-guidelines` — accessibility and UI best practices
 - `api-design-principles` — Route Handler design, resource-oriented paths
 - `api-security-best-practices` — input validation, auth guards
+- `e2e-testing-patterns` — Playwright test structure and assertion patterns

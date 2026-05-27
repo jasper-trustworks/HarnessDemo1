@@ -15,6 +15,8 @@
     "db:generate": "drizzle-kit generate --config src/drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config src/drizzle.config.ts",
     "db:studio": "drizzle-kit studio --config src/drizzle.config.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
