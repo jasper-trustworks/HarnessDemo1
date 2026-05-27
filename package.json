@@ -7,11 +7,22 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run --config src/vitest.config.ts",
+    "test:coverage": "vitest run --config src/vitest.config.ts --coverage",
     "test:watch": "vitest --config src/vitest.config.ts",
     "db:generate": "drizzle-kit generate --config src/drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config src/drizzle.config.ts",
-    "db:studio": "drizzle-kit studio --config src/drizzle.config.ts"
+    "db:studio": "drizzle-kit studio --config src/drizzle.config.ts",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,css,yaml,yml}": "prettier --write"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
@@ -32,7 +43,12 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "15.5.18",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-sonarjs": "^4.0.3",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.7"

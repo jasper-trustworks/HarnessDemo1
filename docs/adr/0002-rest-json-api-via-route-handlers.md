@@ -11,7 +11,7 @@ path is React Server Components plus Server Actions. The interactive surface of
 this product, however, is client-driven: members edit Lists and Tasks in a
 shared Workspace, expect optimistic updates, and the real-time-collaboration
 approach is still unresolved (assumption A1, high risk). Client Components need
-a stable way to read and mutate data *after* hydration, without a full
+a stable way to read and mutate data _after_ hydration, without a full
 server-rendered round-trip per interaction.
 
 We need an explicit, named contract between that client surface — the "SPA" the
@@ -24,15 +24,15 @@ boundary becomes high.
 
 ## Decision Drivers
 
-* **Explicit client-server contract** — Client Components need a stable,
+- **Explicit client-server contract** — Client Components need a stable,
   documented way to read and mutate Workspaces, Lists, and Tasks after hydration
-* **Testability** — an HTTP boundary can be exercised independently of React
+- **Testability** — an HTTP boundary can be exercised independently of React
   rendering
-* **Compatibility with ADR-0001** — must stay inside the Next.js App Router, not
+- **Compatibility with ADR-0001** — must stay inside the Next.js App Router, not
   introduce a separate backend service
-* **Future clients and real-time** — keep the door open for non-web clients and
+- **Future clients and real-time** — keep the door open for non-web clients and
   for whatever real-time approach resolves assumption A1
-* **Cache safety** — authenticated data must never be served stale
+- **Cache safety** — authenticated data must never be served stale
 
 ## Considered Options
 
@@ -118,12 +118,12 @@ external client. Per ADR-0001, authenticated Route Handlers set
 
 ### Risks and mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| Inconsistent endpoints and error shapes as routes grow | Adopt a shared request/response and error-envelope helper, and document the REST conventions before the first feature ships |
-| Stale authenticated data from caching | Default authenticated Route Handlers to `cache: 'no-store'` per ADR-0001; opt into caching explicitly and deliberately |
-| Ambiguity over Server Actions vs Route Handlers | Document the rule: Route Handlers for client-consumed reads and mutations; Server Actions only for simple server-rendered forms |
-| Contract drift between client and server | Validate payloads at the boundary (e.g. Zod schemas) and consider generating an OpenAPI spec or typed client once endpoints stabilise |
+| Risk                                                   | Mitigation                                                                                                                            |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Inconsistent endpoints and error shapes as routes grow | Adopt a shared request/response and error-envelope helper, and document the REST conventions before the first feature ships           |
+| Stale authenticated data from caching                  | Default authenticated Route Handlers to `cache: 'no-store'` per ADR-0001; opt into caching explicitly and deliberately                |
+| Ambiguity over Server Actions vs Route Handlers        | Document the rule: Route Handlers for client-consumed reads and mutations; Server Actions only for simple server-rendered forms       |
+| Contract drift between client and server               | Validate payloads at the boundary (e.g. Zod schemas) and consider generating an OpenAPI spec or typed client once endpoints stabilise |
 
 ## Related Decisions
 

@@ -17,9 +17,9 @@ Include:
 
 ## Decision Drivers
 
-* <!-- Must-have requirement -->
-* <!-- Should-have preference -->
-* <!-- Team / operational concern -->
+- <!-- Must-have requirement -->
+- <!-- Should-have preference -->
+- <!-- Team / operational concern -->
 
 ## Considered Options
 
@@ -33,7 +33,7 @@ Include:
 - **Pros**: …
 - **Cons**: …
 
-### Option 3: [Name] *(if applicable)*
+### Option 3: [Name] _(if applicable)_
 
 - **Pros**: …
 - **Cons**: …
@@ -62,8 +62,8 @@ Reference specific pros/cons. Be explicit about what you're trading away.
 ### Risks and mitigations
 
 | Risk | Mitigation |
-|------|-----------|
-| … | … |
+| ---- | ---------- |
+| …    | …          |
 
 ## Related Decisions
 

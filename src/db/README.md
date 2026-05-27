@@ -4,12 +4,12 @@ Drizzle ORM over PostgreSQL 17. This directory is the data-access layer for the 
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `schema.ts` | Single source of truth for all table and enum definitions |
-| `client.ts` | Drizzle client singleton — `import { db } from '@/db/client'` |
-| `migrations/` | Generated SQL migrations — checked in, applied on deploy |
-| `../drizzle.config.ts` | drizzle-kit config pointing at this directory |
+| File                   | Purpose                                                       |
+| ---------------------- | ------------------------------------------------------------- |
+| `schema.ts`            | Single source of truth for all table and enum definitions     |
+| `client.ts`            | Drizzle client singleton — `import { db } from '@/db/client'` |
+| `migrations/`          | Generated SQL migrations — checked in, applied on deploy      |
+| `../drizzle.config.ts` | drizzle-kit config pointing at this directory                 |
 
 ## Local setup
 
@@ -40,12 +40,12 @@ Always commit `schema.ts` and the new migration file together.
 
 ## Schema at a glance
 
-| Table | Purpose |
-|-------|---------|
-| `users` | Global user registry (email unique) |
-| `workspaces` | Top-level containers |
-| `members` | Join table linking users ↔ workspaces |
-| `lists` | Named task collections scoped to a workspace |
-| `tasks` | To-do items: title, status, optional due date and assignee |
+| Table        | Purpose                                                    |
+| ------------ | ---------------------------------------------------------- |
+| `users`      | Global user registry (email unique)                        |
+| `workspaces` | Top-level containers                                       |
+| `members`    | Join table linking users ↔ workspaces                      |
+| `lists`      | Named task collections scoped to a workspace               |
+| `tasks`      | To-do items: title, status, optional due date and assignee |
 
 See `schema.ts` for the authoritative column definitions and `CLAUDE.md` for agent conventions.

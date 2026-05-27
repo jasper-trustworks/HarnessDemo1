@@ -26,15 +26,15 @@ should be designed so that relaxing A2 later is additive rather than a rewrite.
 
 ## Decision Drivers
 
-* **Server-side enforcement** — authorization must hold at the API boundary, not
+- **Server-side enforcement** — authorization must hold at the API boundary, not
   in the client, since Route Handlers are directly callable
-* **Workspace scoping** — every data access must be constrained to the caller's
+- **Workspace scoping** — every data access must be constrained to the caller's
   Workspace
-* **Secure-by-default sessions** — authenticated responses must not be cached or
+- **Secure-by-default sessions** — authenticated responses must not be cached or
   leak across users (ties to ADR-0001's `cache: 'no-store'`)
-* **Low ceremony for a small team** — prefer a maintained library over bespoke
+- **Low ceremony for a small team** — prefer a maintained library over bespoke
   crypto and session handling
-* **Forward-compatibility** — the design should extend to multiple Workspaces
+- **Forward-compatibility** — the design should extend to multiple Workspaces
   per Member without reworking every endpoint
 
 ## Considered Options
@@ -83,7 +83,7 @@ database-session option reuses the PostgreSQL instance we already chose
 needs and enlarge the security surface we must own; a hosted IdP solves more
 than launch requires and moves identity data off-platform.
 
-The load-bearing choice is *where* authorization runs. Because ADR-0002 exposes
+The load-bearing choice is _where_ authorization runs. Because ADR-0002 exposes
 directly-callable endpoints, we enforce access control on the server every time:
 a Route Handler resolves the session, derives the Member's `workspaceId`, and the
 data-access layer scopes every read and write to it. Designing the check around a
@@ -111,12 +111,12 @@ endpoint-by-endpoint rewrite. Authenticated responses set `cache: 'no-store'`
 
 ### Risks and mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| A Member accessing another Workspace's data | Scope every query by the session-derived `workspaceId` in the data-access layer; never trust a client-supplied workspace id; cover with authorization tests |
-| Authenticated responses cached or shared across users | Set `cache: 'no-store'` on authenticated routes per ADR-0001; mark session cookies `HttpOnly`, `Secure`, `SameSite` |
-| Hard-coding A2 (one workspace per user) into endpoints | Derive `workspaceId` from membership so multi-workspace support is an additive change |
-| Session-table load as usage grows | Index the session table; revisit JWT or a session cache if read load becomes significant |
+| Risk                                                   | Mitigation                                                                                                                                                  |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A Member accessing another Workspace's data            | Scope every query by the session-derived `workspaceId` in the data-access layer; never trust a client-supplied workspace id; cover with authorization tests |
+| Authenticated responses cached or shared across users  | Set `cache: 'no-store'` on authenticated routes per ADR-0001; mark session cookies `HttpOnly`, `Secure`, `SameSite`                                         |
+| Hard-coding A2 (one workspace per user) into endpoints | Derive `workspaceId` from membership so multi-workspace support is an additive change                                                                       |
+| Session-table load as usage grows                      | Index the session table; revisit JWT or a session cache if read load becomes significant                                                                    |
 
 ## Related Decisions
 

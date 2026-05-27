@@ -7,6 +7,7 @@ feature implementation starts from here.**
 Stack: **TypeScript · Next.js 15 (App Router, ADR-0001) · PostgreSQL 17 (ADR-0003) · Drizzle ORM (ADR-0004) · Vitest**.
 
 Two sources of truth, split by topic:
+
 - **Product** scope, domain model, assumptions, and feature status → `.spec-lite/project.md`.
 - **Technical / architectural** decisions → ADRs in `docs/adr/` (see below).
 
@@ -14,12 +15,12 @@ Two sources of truth, split by topic:
 
 Use these terms consistently in code, tests, and docs (defined in `.spec-lite/project.md`):
 
-| Term | Meaning |
-|------|---------|
-| **Workspace** | Top-level container scoped to a team/org; members share access |
-| **List** | Named collection of tasks within a workspace (e.g. "Shopping") |
-| **Task** | A to-do item: title, status, optional due date and assignee |
-| **Member** | A user belonging to a workspace who can view/edit its lists and tasks |
+| Term          | Meaning                                                               |
+| ------------- | --------------------------------------------------------------------- |
+| **Workspace** | Top-level container scoped to a team/org; members share access        |
+| **List**      | Named collection of tasks within a workspace (e.g. "Shopping")        |
+| **Task**      | A to-do item: title, status, optional due date and assignee           |
+| **Member**    | A user belonging to a workspace who can view/edit its lists and tasks |
 
 Open assumptions (still unvalidated): real-time collaboration approach (A1, high risk),
 single-workspace-per-user at launch (A2), no sub-tasks/dependencies at launch (A3).
@@ -36,6 +37,7 @@ their content. Do not duplicate a decision's rationale or constraints outside it
 the ADR instead. If any document ever conflicts with an accepted ADR, the ADR wins.
 
 Constraints are documented co-located with the code they govern:
+
 - **App layer** (Next.js, routing, components) → [`src/app/CLAUDE.md`](src/app/CLAUDE.md)
 - **Database layer** (PostgreSQL, Drizzle, migrations) → [`src/db/CLAUDE.md`](src/db/CLAUDE.md)
 
@@ -44,24 +46,25 @@ ADRs live only in `docs/adr/`.)
 
 ## Repository map
 
-| Path | What it is |
-|------|-----------|
-| `src/app/` | Next.js App Router — pages, layouts, Route Handlers — see [`src/app/README.md`](src/app/README.md) |
-| `src/db/` | Database layer: schema, client, migrations — see [`src/db/README.md`](src/db/README.md) |
-| `src/drizzle.config.ts` | drizzle-kit config (schema path, migrations dir, dialect) |
-| `.env.local.example` | Template for local env vars (copy to `.env.local`, gitignored) |
-| `.spec-lite/` | Product definition, domain model, assumptions, feature tracking |
-| `docs/adr/` | Architecture Decision Records (+ index and template) |
-| `docs/architecture/` | C4 overview (System Context + Container diagrams) |
-| `agr.toml` / `agr.lock` | Declared agent skills and their pinned versions |
-| `.claude/` | Claude Code project settings, enabled plugins, synced skills |
-| `.devcontainer/` | Dev environment: Dockerfile, devcontainer.json, setup scripts |
-| `docker-compose.postgres.yml` | PostgreSQL 17 service for local development |
+| Path                          | What it is                                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------------------- |
+| `src/app/`                    | Next.js App Router — pages, layouts, Route Handlers — see [`src/app/README.md`](src/app/README.md) |
+| `src/db/`                     | Database layer: schema, client, migrations — see [`src/db/README.md`](src/db/README.md)            |
+| `src/drizzle.config.ts`       | drizzle-kit config (schema path, migrations dir, dialect)                                          |
+| `.env.local.example`          | Template for local env vars (copy to `.env.local`, gitignored)                                     |
+| `.spec-lite/`                 | Product definition, domain model, assumptions, feature tracking                                    |
+| `docs/adr/`                   | Architecture Decision Records (+ index and template)                                               |
+| `docs/architecture/`          | C4 overview (System Context + Container diagrams)                                                  |
+| `agr.toml` / `agr.lock`       | Declared agent skills and their pinned versions                                                    |
+| `.claude/`                    | Claude Code project settings, enabled plugins, synced skills                                       |
+| `.devcontainer/`              | Dev environment: Dockerfile, devcontainer.json, setup scripts                                      |
+| `docker-compose.postgres.yml` | PostgreSQL 17 service for local development                                                        |
 
 ## Toolchain & when to use it
 
 **Agent skills (`agr`)** — 19 skills are declared in `agr.toml`, pinned in `agr.lock`, and
 synced into `.claude/skills/` automatically on session start. The relevant ones by area:
+
 - Frontend/React: `react-best-practices`, `react-component-performance`, `composition-patterns`, `web-design-guidelines`
 - Backend: `backend-dev-guidelines`, `error-handling-patterns`
 - API: `api-design-principles`, `api-security-best-practices`
@@ -74,6 +77,7 @@ synced into `.claude/skills/` automatically on session start. The relevant ones 
 `frontend-design`, `commit-commands`, and more.
 
 **Reach for:**
+
 - **A new feature** → `spec-lite` (`/spec-lite:spec` → `/spec-lite:tasks` → `/spec-lite:implement`).
 - **A technical/architectural choice** → the `architecture-decision-records` skill; record the outcome as an ADR in `docs/adr/`.
 - **Before merging** → `tw-code-review`.
@@ -108,6 +112,7 @@ Full detail lives in `README.md`; the rules that affect how you run commands:
   `backend-dev-guidelines` — rather than reinventing patterns.
 
 Area-specific conventions live co-located with each directory:
+
 - `src/app/CLAUDE.md` — Next.js component, routing, and Route Handler patterns
 - `src/db/CLAUDE.md` — schema, migration workflow, and repository patterns
 

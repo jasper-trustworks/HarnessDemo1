@@ -96,13 +96,13 @@ Pages go in the appropriate route group. Every new `page.tsx` is a Server Compon
 Add a `route.ts` under `src/app/api/v1/`. Always start with session resolution:
 
 ```ts
-import { getRequiredSession } from '@/app/_lib/session'
-import { getListsForWorkspace } from '@/db/lists'
+import { getRequiredSession } from "@/app/_lib/session";
+import { getListsForWorkspace } from "@/db/lists";
 
 export async function GET() {
-  const session = await getRequiredSession()
-  const lists = await getListsForWorkspace(session.workspaceId)
-  return Response.json(lists)
+  const session = await getRequiredSession();
+  const lists = await getListsForWorkspace(session.workspaceId);
+  return Response.json(lists);
 }
 ```
 
@@ -115,8 +115,8 @@ Design tokens, typography classes, and component CSS classes all live in `global
 Use CSS custom properties — never raw hex values.
 
 ```css
-color: var(--ink-4);          /* secondary text */
-background: var(--paper);     /* primary canvas #FAFAF7 */
+color: var(--ink-4); /* secondary text */
+background: var(--paper); /* primary canvas #FAFAF7 */
 border: 1px solid var(--border);
 ```
 
@@ -133,12 +133,12 @@ border: 1px solid var(--border);
 ### UI primitives — import by direct path
 
 ```tsx
-import { Button, IconButton }   from '@/app/_components/ui/Button'
-import { Avatar, AvatarStack }  from '@/app/_components/ui/Avatar'
-import { Badge }                from '@/app/_components/ui/Badge'
-import { Input }                from '@/app/_components/ui/Input'
-import { Checkbox }             from '@/app/_components/ui/Checkbox'
-import { Icon }                 from '@/app/_components/ui/Icon'
+import { Button, IconButton } from "@/app/_components/ui/Button";
+import { Avatar, AvatarStack } from "@/app/_components/ui/Avatar";
+import { Badge } from "@/app/_components/ui/Badge";
+import { Input } from "@/app/_components/ui/Input";
+import { Checkbox } from "@/app/_components/ui/Checkbox";
+import { Icon } from "@/app/_components/ui/Icon";
 ```
 
 ```tsx
@@ -163,8 +163,13 @@ import { Icon }                 from '@/app/_components/ui/Icon'
 ```bash
 npm run dev                        # start dev server on http://localhost:3000
 NODE_ENV=production npm run build  # production build
-npm run lint                       # ESLint
+npm run format                     # Prettier — format all files in place
+npm run format:check               # Prettier — check only (used in CI)
+npm run lint                       # ESLint + SonarJS
 npm test                           # Vitest
+npm run test:coverage              # Vitest with lcov coverage → src/coverage/
 ```
+
+The pre-commit hook (Husky + lint-staged) runs `prettier --write` and `eslint --fix` automatically on staged `.ts/.tsx` files before every commit. Commits are blocked if any non-auto-fixable lint errors remain.
 
 See `CLAUDE.md` in this directory for agent conventions and `src/db/README.md` for database setup.

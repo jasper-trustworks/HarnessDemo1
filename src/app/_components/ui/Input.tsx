@@ -13,7 +13,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <input
       ref={ref}
-      className={`input${className ? ` ${className}` : ""}`}
+      className={["input", className].filter(Boolean).join(" ")}
       {...props}
     />
   );

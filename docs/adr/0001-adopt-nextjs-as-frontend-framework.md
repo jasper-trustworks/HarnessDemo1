@@ -17,14 +17,14 @@ The application will be deployed to Vercel.
 
 ## Decision Drivers
 
-* **Full-stack colocation** — server-side data fetching and backend logic
+- **Full-stack colocation** — server-side data fetching and backend logic
   should live in the same repository as the UI, without requiring a separate
   API service for every new route
-* **Avoid client-side data waterfalls** — authenticated apps with nested data
+- **Avoid client-side data waterfalls** — authenticated apps with nested data
   dependencies benefit from server-side composition (React Server Components)
-* **File-based routing convention** — reduces boilerplate and enforces a
+- **File-based routing convention** — reduces boilerplate and enforces a
   consistent structure as the codebase grows
-* **Deployment fit** — Vercel provides first-class Next.js support: zero-config
+- **Deployment fit** — Vercel provides first-class Next.js support: zero-config
   deploys, edge functions, and native Server Action infrastructure
 
 ## Considered Options
@@ -96,12 +96,12 @@ server negligible compared to self-hosting.
 
 ### Risks and mitigations
 
-| Risk | Mitigation |
-|------|-----------|
-| Caching behaviour surprises (stale data in production) | Default to `no-store` for authenticated routes; add caching explicitly only when needed |
-| Team unfamiliarity with RSC boundary rules | Establish a convention: start every new component as a Server Component and add `'use client'` only when required (event handlers, browser APIs) |
-| Next.js breaking changes across minor versions | Pin to a minor version in CI; review changelog before upgrading |
+| Risk                                                   | Mitigation                                                                                                                                       |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Caching behaviour surprises (stale data in production) | Default to `no-store` for authenticated routes; add caching explicitly only when needed                                                          |
+| Team unfamiliarity with RSC boundary rules             | Establish a convention: start every new component as a Server Component and add `'use client'` only when required (event handlers, browser APIs) |
+| Next.js breaking changes across minor versions         | Pin to a minor version in CI; review changelog before upgrading                                                                                  |
 
 ## Related Decisions
 
-- *None yet — link here when auth strategy or API layer ADRs are written*
+- _None yet — link here when auth strategy or API layer ADRs are written_

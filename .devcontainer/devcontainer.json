@@ -1,225 +1,227 @@
 {
-    "name": "HarnessDemo1",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".",
-        "args": {
-            // Project identity — used for container naming and Docker labels
-            "PROJECT_NAME": "HarnessDemo1",
+  "name": "HarnessDemo1",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "args": {
+      // Project identity — used for container naming and Docker labels
+      "PROJECT_NAME": "HarnessDemo1",
 
-            // Installation toggles (true/false)
-            "INSTALL_CLAUDE": "true",
-            "INSTALL_BUN": "true",
-            "INSTALL_GITNEXUS": "true",
-            "ALLOW_NPM_SCRIPTS": "true",
-            "ALLOW_BUN_SCRIPTS": "true",
+      // Installation toggles (true/false)
+      "INSTALL_CLAUDE": "true",
+      "INSTALL_BUN": "true",
+      "INSTALL_GITNEXUS": "true",
+      "ALLOW_NPM_SCRIPTS": "true",
+      "ALLOW_BUN_SCRIPTS": "true",
 
-            // Azure DevOps support — adds dev.azure.com, ssh.dev.azure.com,
-            // aex.dev.azure.com to the firewall whitelist. Set to "true" if your
-            // project uses Azure DevOps for source control or pipelines.
-            "ALLOW_AZURE_DEVOPS": "false",
+      // Azure DevOps support — adds dev.azure.com, ssh.dev.azure.com,
+      // aex.dev.azure.com to the firewall whitelist. Set to "true" if your
+      // project uses Azure DevOps for source control or pipelines.
+      "ALLOW_AZURE_DEVOPS": "false",
 
-            // JetBrains Gateway support (controls firewall domain whitelisting)
-            "INSTALL_JETBRAINS": "false",
+      // JetBrains Gateway support (controls firewall domain whitelisting)
+      "INSTALL_JETBRAINS": "false",
 
-            // Docs pipeline (Sphinx + sphinx-needs + PlantUML + Graphviz).
-            // Flip to "true" and rebuild to enable Sphinx HTML rendering via
-            // the trustworks-plugins methodology plugins (refac, arch, discovery).
-            "INSTALL_DOCS_PIPELINE": "false",
+      // Docs pipeline (Sphinx + sphinx-needs + PlantUML + Graphviz).
+      // Flip to "true" and rebuild to enable Sphinx HTML rendering via
+      // the trustworks-plugins methodology plugins (refac, arch, discovery).
+      "INSTALL_DOCS_PIPELINE": "false",
 
-            // Docker Content Trust (image signature verification)
-            // Enable only if all images you pull are signed with Notary v1.
-            "ENABLE_DCT": "false"
+      // Docker Content Trust (image signature verification)
+      // Enable only if all images you pull are signed with Notary v1.
+      "ENABLE_DCT": "false"
 
-            // Git identity is in containerEnv (not here) to avoid leaking PII into image layers.
-        }
+      // Git identity is in containerEnv (not here) to avoid leaking PII into image layers.
+    }
+  },
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+
+  // ==========================================================================
+  // DevContainer Features
+  // ==========================================================================
+  "features": {
+    // Docker-in-Docker support for TestContainers and container workflows.
+    // moby: false → installs Docker CE from download.docker.com instead of Microsoft's
+    // Moby packages. Required on Debian trixie+ (Moby packages removed from trixie).
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": false,
+      "dockerDashComposeVersion": "v2"
     },
-    "workspaceFolder": "/workspace",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+    // Node.js via DevContainer feature.
+    // nodeGypDependencies: true → ensures gcc/g++/make/python3 are available for
+    // native npm addons (bcrypt, sharp, sqlite3, better-sqlite3, canvas, etc.).
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24",
+      "nodeGypDependencies": true
+    },
+    // Python via DevContainer feature
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.14",
+      "installTools": true
+    }
+  },
 
-    // ==========================================================================
-    // DevContainer Features
-    // ==========================================================================
-    "features": {
-        // Docker-in-Docker support for TestContainers and container workflows.
-        // moby: false → installs Docker CE from download.docker.com instead of Microsoft's
-        // Moby packages. Required on Debian trixie+ (Moby packages removed from trixie).
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {
-            "version": "latest",
-            "moby": false,
-            "dockerDashComposeVersion": "v2"
+  // ==========================================================================
+  // User Configuration
+  // ==========================================================================
+  "remoteUser": "vscode",
+
+  // ==========================================================================
+  // Environment Variables
+  // ==========================================================================
+  "containerEnv": {
+    "LANG": "en_US.UTF-8",
+    "LANGUAGE": "en_US:en",
+    "LC_ALL": "en_US.UTF-8",
+    // Timezone — matches host timezone at container start
+    "TZ": "${localEnv:TZ}",
+    // Firewall: additional domains to whitelist.
+    // Format: space-separated FQDNs — bare domains only, no protocol/port/path.
+    // Each domain is DNS-resolved at container start. Subdomains must be listed
+    // individually (e.g., "api.example.com cdn.example.com", not "*.example.com").
+    "EXTRA_FIREWALL_DOMAINS": "",
+    // Git identity — each developer creates .devcontainer/.env.local
+    // (gitignored, see .env.local.example) which post-create.sh sources
+    // before running `git config --global`. Left empty here so the vars
+    // exist in the container environment; .env.local supplies the values.
+    "GIT_USER_NAME": "",
+    "GIT_USER_EMAIL": "",
+    // Development
+    "NODE_ENV": "development",
+    // Plugin marketplace seed directory — plugins are baked into the image
+    // at build time via initializeCommand + Dockerfile COPY. No runtime auth needed.
+    "CLAUDE_CODE_PLUGIN_SEED_DIR": "/opt/claude-seed",
+    // Claude Code authentication — long-lived OAuth token, propagated from the host.
+    // Generate once on the host with `claude setup-token`, export it in your shell,
+    // then rebuild the container. If unset, falls back to interactive login inside
+    // the container (run `claude setup-token` there — it uses a paste-code flow that
+    // works without a localhost callback).
+    "CLAUDE_CODE_OAUTH_TOKEN": "${localEnv:CLAUDE_CODE_OAUTH_TOKEN}",
+    // EXPERIMENTAL: These flags enable preview features in Claude Code.
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_ENABLE_TASKS": "true",
+    "CLAUDE_CODE_FORK_SUBAGENT": "1"
+  },
+
+  // ==========================================================================
+  // Volume Mounts for Caching
+  // Named volumes persist across container rebuilds.
+  // ${devcontainerId} scopes volumes per devcontainer instance.
+  // ==========================================================================
+  "mounts": [
+    // Node.js/NPM
+    "source=devcontainer-npm-cache-${devcontainerId},target=/home/vscode/.npm,type=volume",
+    // Bun
+    "source=devcontainer-bun-cache-${devcontainerId},target=/home/vscode/.bun,type=volume",
+    // Python/UV/pip
+    "source=devcontainer-uv-cache-${devcontainerId},target=/home/vscode/.cache/uv,type=volume",
+    "source=devcontainer-pip-cache-${devcontainerId},target=/home/vscode/.cache/pip,type=volume",
+
+    // Claude Code config and cache (named volumes — NOT bind-mounted to avoid host-path conflicts)
+    "source=devcontainer-claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=devcontainer-claude-cache-${devcontainerId},target=/home/vscode/.cache/claude-code,type=volume",
+
+    // GitNexus knowledge graph index (persists across rebuilds — re-indexes only on code changes)
+    "source=devcontainer-gitnexus-${devcontainerId},target=/workspace/.gitnexus,type=volume"
+  ],
+
+  // ==========================================================================
+  // Resource Limits & Security
+  // ==========================================================================
+  "runArgs": [
+    "--name",
+    "HarnessDemo1-devcontainer",
+    "--cpus=4",
+    "--memory=8g",
+    "--pids-limit=2048",
+    // Docker-in-Docker requires privileged mode.
+    // Note: --privileged disables AppArmor, seccomp, and capability restrictions.
+    // If Docker-in-Docker is removed, replace --privileged with:
+    //   "--security-opt", "apparmor=docker-default"
+    // (keep --cap-add=NET_ADMIN and NET_RAW for the firewall)
+    "--privileged",
+    // Firewall requires NET_ADMIN (redundant with --privileged but explicit for documentation)
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
+  ],
+
+  // ==========================================================================
+  // Port Forwarding
+  // ==========================================================================
+  "forwardPorts": [],
+  "otherPortsAttributes": {
+    "onAutoForward": "notify"
+  },
+  "portsAttributes": {
+    "3000": { "label": "Node.js App", "onAutoForward": "notify" },
+    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" },
+    "8000": { "label": "Python App", "onAutoForward": "notify" },
+    "9229": { "label": "Node.js Debug", "onAutoForward": "silent" }
+  },
+
+  // ==========================================================================
+  // IDE Customizations
+  // ==========================================================================
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Core
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-azuretools.vscode-docker",
+        "anthropic.claude-code",
+        // Node.js/TypeScript
+        "ms-vscode.vscode-typescript-next",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "SonarSource.sonarlint-vscode",
+        // Python
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        // Editor
+        "editor.formatOnSave": true,
+        "editor.tabCompletion": "on",
+        "editor.suggestSelection": "first",
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
         },
-        // Node.js via DevContainer feature.
-        // nodeGypDependencies: true → ensures gcc/g++/make/python3 are available for
-        // native npm addons (bcrypt, sharp, sqlite3, better-sqlite3, canvas, etc.).
-        "ghcr.io/devcontainers/features/node:1": {
-            "version": "24",
-            "nodeGypDependencies": true
+        // Terminal
+        "terminal.integrated.defaultProfile.linux": "bash",
+        // Python settings
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
         },
-        // Python via DevContainer feature
-        "ghcr.io/devcontainers/features/python:1": {
-            "version": "3.14",
-            "installTools": true
-        }
-    },
+        // TypeScript/JavaScript settings
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        // Telemetry (disabled)
+        "telemetry.telemetryLevel": "off",
+        "redhat.telemetry.enabled": false,
+        "dotnetAcquisitionExtension.enableTelemetry": false
+      }
+    }
+  },
 
-    // ==========================================================================
-    // User Configuration
-    // ==========================================================================
-    "remoteUser": "vscode",
-
-    // ==========================================================================
-    // Environment Variables
-    // ==========================================================================
-    "containerEnv": {
-        "LANG": "en_US.UTF-8",
-        "LANGUAGE": "en_US:en",
-        "LC_ALL": "en_US.UTF-8",
-        // Timezone — matches host timezone at container start
-        "TZ": "${localEnv:TZ}",
-        // Firewall: additional domains to whitelist.
-        // Format: space-separated FQDNs — bare domains only, no protocol/port/path.
-        // Each domain is DNS-resolved at container start. Subdomains must be listed
-        // individually (e.g., "api.example.com cdn.example.com", not "*.example.com").
-        "EXTRA_FIREWALL_DOMAINS": "",
-        // Git identity — each developer creates .devcontainer/.env.local
-        // (gitignored, see .env.local.example) which post-create.sh sources
-        // before running `git config --global`. Left empty here so the vars
-        // exist in the container environment; .env.local supplies the values.
-        "GIT_USER_NAME": "",
-        "GIT_USER_EMAIL": "",
-        // Development
-        "NODE_ENV": "development",
-        // Plugin marketplace seed directory — plugins are baked into the image
-        // at build time via initializeCommand + Dockerfile COPY. No runtime auth needed.
-        "CLAUDE_CODE_PLUGIN_SEED_DIR": "/opt/claude-seed",
-        // Claude Code authentication — long-lived OAuth token, propagated from the host.
-        // Generate once on the host with `claude setup-token`, export it in your shell,
-        // then rebuild the container. If unset, falls back to interactive login inside
-        // the container (run `claude setup-token` there — it uses a paste-code flow that
-        // works without a localhost callback).
-        "CLAUDE_CODE_OAUTH_TOKEN": "${localEnv:CLAUDE_CODE_OAUTH_TOKEN}",
-        // EXPERIMENTAL: These flags enable preview features in Claude Code.
-        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-        "CLAUDE_CODE_ENABLE_TASKS": "true",
-        "CLAUDE_CODE_FORK_SUBAGENT": "1"
-    },
-
-    // ==========================================================================
-    // Volume Mounts for Caching
-    // Named volumes persist across container rebuilds.
-    // ${devcontainerId} scopes volumes per devcontainer instance.
-    // ==========================================================================
-    "mounts": [
-        // Node.js/NPM
-        "source=devcontainer-npm-cache-${devcontainerId},target=/home/vscode/.npm,type=volume",
-        // Bun
-        "source=devcontainer-bun-cache-${devcontainerId},target=/home/vscode/.bun,type=volume",
-        // Python/UV/pip
-        "source=devcontainer-uv-cache-${devcontainerId},target=/home/vscode/.cache/uv,type=volume",
-        "source=devcontainer-pip-cache-${devcontainerId},target=/home/vscode/.cache/pip,type=volume",
-
-        // Claude Code config and cache (named volumes — NOT bind-mounted to avoid host-path conflicts)
-        "source=devcontainer-claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
-        "source=devcontainer-claude-cache-${devcontainerId},target=/home/vscode/.cache/claude-code,type=volume",
-
-        // GitNexus knowledge graph index (persists across rebuilds — re-indexes only on code changes)
-        "source=devcontainer-gitnexus-${devcontainerId},target=/workspace/.gitnexus,type=volume"
-    ],
-
-    // ==========================================================================
-    // Resource Limits & Security
-    // ==========================================================================
-    "runArgs": [
-        "--name", "HarnessDemo1-devcontainer",
-        "--cpus=4",
-        "--memory=8g",
-        "--pids-limit=2048",
-        // Docker-in-Docker requires privileged mode.
-        // Note: --privileged disables AppArmor, seccomp, and capability restrictions.
-        // If Docker-in-Docker is removed, replace --privileged with:
-        //   "--security-opt", "apparmor=docker-default"
-        // (keep --cap-add=NET_ADMIN and NET_RAW for the firewall)
-        "--privileged",
-        // Firewall requires NET_ADMIN (redundant with --privileged but explicit for documentation)
-        "--cap-add=NET_ADMIN",
-        "--cap-add=NET_RAW"
-    ],
-
-    // ==========================================================================
-    // Port Forwarding
-    // ==========================================================================
-    "forwardPorts": [],
-    "otherPortsAttributes": {
-        "onAutoForward": "notify"
-    },
-    "portsAttributes": {
-        "3000": { "label": "Node.js App", "onAutoForward": "notify" },
-        "5432": { "label": "PostgreSQL", "onAutoForward": "silent" },
-        "8000": { "label": "Python App", "onAutoForward": "notify" },
-        "9229": { "label": "Node.js Debug", "onAutoForward": "silent" }
-    },
-
-    // ==========================================================================
-    // IDE Customizations
-    // ==========================================================================
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                // Core
-                "github.copilot"
-                ,"github.copilot-chat"
-                ,"ms-azuretools.vscode-docker"
-                ,"anthropic.claude-code"
-                // Node.js/TypeScript
-                ,"ms-vscode.vscode-typescript-next"
-                ,"dbaeumer.vscode-eslint"
-                ,"esbenp.prettier-vscode"
-                // Python
-                ,"ms-python.python"
-                ,"ms-python.vscode-pylance"
-                ,"charliermarsh.ruff"
-            ],
-            "settings": {
-                // Editor
-                "editor.formatOnSave": true,
-                "editor.tabCompletion": "on",
-                "editor.suggestSelection": "first",
-                "editor.codeActionsOnSave": {
-                    "source.organizeImports": "explicit"
-                },
-                // Terminal
-                "terminal.integrated.defaultProfile.linux": "bash",
-                // Python settings
-                "python.defaultInterpreterPath": "/usr/local/bin/python",
-                "[python]": {
-                    "editor.defaultFormatter": "charliermarsh.ruff"
-                },
-                // TypeScript/JavaScript settings
-                "[typescript]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[javascript]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                // Telemetry (disabled)
-                "telemetry.telemetryLevel": "off",
-                "redhat.telemetry.enabled": false,
-                "dotnetAcquisitionExtension.enableTelemetry": false
-            }
-        }
-    },
-
-    // ==========================================================================
-    // Lifecycle Scripts
-    // ==========================================================================
-    // Runs on the HOST before the image build. Clones/updates plugin marketplace
-    // repos using the developer's local git credentials — credentials never enter
-    // the container image. Every rebuild fetches latest plugin versions.
-    "initializeCommand": "bash .devcontainer/scripts/fetch-marketplaces.sh",
-    "onCreateCommand": "echo '✅ DevContainer created successfully!'",
-    "postCreateCommand": "if [ -f /workspace/.devcontainer/scripts/post-create.sh ]; then bash /workspace/.devcontainer/scripts/post-create.sh; else echo '⚠️ post-create.sh not found, skipping...'; fi",
-    "postStartCommand": "sudo /usr/local/bin/init-firewall.sh && git config --global --add safe.directory /workspace 2>/dev/null || true",
-    "waitFor": "postStartCommand",
-    "shutdownAction": "stopContainer"
+  // ==========================================================================
+  // Lifecycle Scripts
+  // ==========================================================================
+  // Runs on the HOST before the image build. Clones/updates plugin marketplace
+  // repos using the developer's local git credentials — credentials never enter
+  // the container image. Every rebuild fetches latest plugin versions.
+  "initializeCommand": "bash .devcontainer/scripts/fetch-marketplaces.sh",
+  "onCreateCommand": "echo '✅ DevContainer created successfully!'",
+  "postCreateCommand": "if [ -f /workspace/.devcontainer/scripts/post-create.sh ]; then bash /workspace/.devcontainer/scripts/post-create.sh; else echo '⚠️ post-create.sh not found, skipping...'; fi",
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh && git config --global --add safe.directory /workspace 2>/dev/null || true",
+  "waitFor": "postStartCommand",
+  "shutdownAction": "stopContainer"
 }

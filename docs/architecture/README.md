@@ -62,13 +62,13 @@ C4Container
 
 ### How the containers map to the ADRs
 
-| Container / relationship | Decision | ADR |
-|--------------------------|----------|-----|
-| Next.js Application (App Router, Server Components by default, on Vercel) | Adopt Next.js as the frontend framework | [ADR-0001](../adr/0001-adopt-nextjs-as-frontend-framework.md) |
-| SPA → Next.js over **REST/JSON via Route Handlers** | Expose an explicit API consumed by Client Components | [ADR-0002](../adr/0002-rest-json-api-via-route-handlers.md) |
-| **PostgreSQL** container | PostgreSQL as the primary database | [ADR-0003](../adr/0003-postgresql-as-the-database.md) |
-| Next.js → PostgreSQL via a **data-access layer** | TypeScript query layer + migrations | [ADR-0004](../adr/0004-data-access-with-orm-and-migrations.md) |
-| Member → SPA (authenticated session); workspace-scoped access | Auth + workspace-scoped authorization, enforced server-side | [ADR-0005](../adr/0005-authentication-and-workspace-authorization.md) |
+| Container / relationship                                                  | Decision                                                    | ADR                                                                   |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| Next.js Application (App Router, Server Components by default, on Vercel) | Adopt Next.js as the frontend framework                     | [ADR-0001](../adr/0001-adopt-nextjs-as-frontend-framework.md)         |
+| SPA → Next.js over **REST/JSON via Route Handlers**                       | Expose an explicit API consumed by Client Components        | [ADR-0002](../adr/0002-rest-json-api-via-route-handlers.md)           |
+| **PostgreSQL** container                                                  | PostgreSQL as the primary database                          | [ADR-0003](../adr/0003-postgresql-as-the-database.md)                 |
+| Next.js → PostgreSQL via a **data-access layer**                          | TypeScript query layer + migrations                         | [ADR-0004](../adr/0004-data-access-with-orm-and-migrations.md)        |
+| Member → SPA (authenticated session); workspace-scoped access             | Auth + workspace-scoped authorization, enforced server-side | [ADR-0005](../adr/0005-authentication-and-workspace-authorization.md) |
 
 ## What is intentionally not shown
 

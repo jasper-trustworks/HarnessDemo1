@@ -40,7 +40,12 @@ const sizeClass: Record<AvatarSize, string> = {
   xl: "xl",
 };
 
-export function Avatar({ name, size = "md", active = false, style }: AvatarProps) {
+export function Avatar({
+  name,
+  size = "md",
+  active = false,
+  style,
+}: AvatarProps) {
   const cls = ["avatar", sizeClass[size], active ? "active" : ""]
     .filter(Boolean)
     .join(" ");

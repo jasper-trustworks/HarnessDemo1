@@ -5,18 +5,33 @@ Agent instructions for this directory. See `README.md` for the developer overvie
 ## ADR constraints in force
 
 **ADR-0001 (Next.js App Router):**
+
 - Default every component to a **Server Component**; add `'use client'` only when you need event handlers or browser APIs.
 - Use `cache: 'no-store'` for authenticated routes; add caching explicitly and deliberately.
 - Pin the Next.js **minor** version in CI; review the changelog before upgrading.
 
 **ADR-0002 (REST/JSON API):**
+
 - All product API routes live under `/api/v1/` (versioned from day one).
 - Route Handlers follow **parse → call repository → respond** — no business logic or raw DB access inline.
 - Every authenticated Route Handler resolves the session first; `workspaceId` comes from the session, never from the request body or query string.
 
 **ADR-0005 (Auth.js + workspace-scoped authorization):**
+
 - Use `getRequiredSession()` from `_lib/session.ts` at the top of every authenticated Route Handler and server-fetching Server Component.
 - Never trust a client-supplied workspace identifier — always derive it from the authenticated session.
+
+## Code quality
+
+All code in this directory must pass `npm run lint` and `npm run format:check` — both are enforced by the Husky pre-commit hook and in CI (ADR-0006).
+
+**Prettier** (`.prettierrc` at repo root) owns whitespace: double quotes, semicolons, 2-space indent. Never fight it — let it reformat on save or run `npm run format`.
+
+**ESLint + SonarJS** (`eslint-plugin-sonarjs`) adds rules beyond TypeScript. Three that come up most in React/UI code:
+
+- `sonarjs/no-nested-conditional` — no nested ternaries. Use a lookup object or a `size !== "md" ? size : ""` style single conditional instead.
+- `sonarjs/no-nested-template-literals` — no `` `outer ${`inner`}` ``. Extract the inner value to a variable first, or build className strings with array + `.filter(Boolean).join(" ")`.
+- `sonarjs/unused-import` — remove every unused import; the pre-commit hook will block if any remain.
 
 ## Design system
 
@@ -31,23 +46,23 @@ background: var(--paper);
 border: 1px solid var(--border);
 
 /* wrong */
-color: #5A5A55;
-background: #FAFAF7;
+color: #5a5a55;
+background: #fafaf7;
 ```
 
 Key semantic roles:
 
-| Variable | Meaning |
-|----------|---------|
-| `--paper` / `--bg` | Primary canvas (`#FAFAF7`) |
-| `--ink` / `--fg` | Primary text and controls |
-| `--ink-4` / `--fg-muted` | Secondary text |
-| `--ink-5` / `--fg-subtle` | Tertiary text, placeholders |
-| `--coral` | Live/sync/presence signal — use sparingly |
-| `--cobalt` | Links, focus rings, selected state — use sparingly |
-| `--border` | Default hairline (`var(--ink-8)`) |
-| `--bg-hover` | Row hover fill (`var(--ink-9)`) |
-| `--bg-selected` | Selected row fill (`var(--cobalt-soft)`) |
+| Variable                  | Meaning                                            |
+| ------------------------- | -------------------------------------------------- |
+| `--paper` / `--bg`        | Primary canvas (`#FAFAF7`)                         |
+| `--ink` / `--fg`          | Primary text and controls                          |
+| `--ink-4` / `--fg-muted`  | Secondary text                                     |
+| `--ink-5` / `--fg-subtle` | Tertiary text, placeholders                        |
+| `--coral`                 | Live/sync/presence signal — use sparingly          |
+| `--cobalt`                | Links, focus rings, selected state — use sparingly |
+| `--border`                | Default hairline (`var(--ink-8)`)                  |
+| `--bg-hover`              | Row hover fill (`var(--ink-9)`)                    |
+| `--bg-selected`           | Selected row fill (`var(--cobalt-soft)`)           |
 
 **Color is rare.** A typical screen uses at most one saturated color on two or three elements. Never combine coral and cobalt at full saturation without a clear hierarchy.
 
@@ -68,6 +83,7 @@ Scale: `t-display-xl` · `t-display` · `t-display-sm` · `t-h` · `t-h-sm` · `
 Modifiers: `t-italic` · `t-muted` · `t-subtle` · `t-link`
 
 **Copy rules (enforce in all UI text):**
+
 - Sentence case everywhere — headlines, buttons, labels, menu items. Title Case only for proper nouns.
 - No emoji — not in product, not in error states, not in empty states.
 - No exclamation marks.
@@ -79,12 +95,12 @@ Modifiers: `t-italic` · `t-muted` · `t-subtle` · `t-link`
 All primitives live in `src/app/_components/ui/`. Import by direct path — no barrel files.
 
 ```tsx
-import { Button, IconButton } from '@/app/_components/ui/Button'
-import { Avatar, AvatarStack } from '@/app/_components/ui/Avatar'
-import { Badge } from '@/app/_components/ui/Badge'
-import { Input } from '@/app/_components/ui/Input'
-import { Checkbox } from '@/app/_components/ui/Checkbox'
-import { Icon } from '@/app/_components/ui/Icon'
+import { Button, IconButton } from "@/app/_components/ui/Button";
+import { Avatar, AvatarStack } from "@/app/_components/ui/Avatar";
+import { Badge } from "@/app/_components/ui/Badge";
+import { Input } from "@/app/_components/ui/Input";
+import { Checkbox } from "@/app/_components/ui/Checkbox";
+import { Icon } from "@/app/_components/ui/Icon";
 ```
 
 **Button variants:** `default` (outlined), `primary` (ink fill), `ghost` (no border), `danger`  
@@ -98,19 +114,19 @@ Use `IconButton` (not `Button` with an icon prop) for icon-only controls — it 
 
 Shared chrome is in `globals.css`. Use these classes directly on HTML elements when building new layout or before extracting to a component:
 
-| Class | Use |
-|-------|-----|
-| `.btn` | Base button (combine with `.primary`, `.ghost`, `.danger`, `.sm`, `.lg`, `.icon`) |
-| `.chip` | Badge/tag (combine with `.cobalt`, `.coral`, `.success`, `.warn`, `.danger`, `.ink`, `.outline`, `.sq`) |
-| `.avatar` | Initials avatar circle (combine with `.lg`, `.xl`) |
-| `.avatar-stack` | Overlapping avatar row |
-| `.input` | Text input with focus ring |
-| `.checkbox` | Circular task checkbox (combine with `.done`) |
-| `.task-row` | 5-column task list row with hover and selected states |
-| `.card` | White card with border and `--r-lg` radius |
-| `.panel` | White panel with `--shadow-pop` |
-| `.eyebrow` | Uppercase section label |
-| `.divider` | 1px horizontal rule (`.strong` for heavier weight) |
+| Class           | Use                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------- |
+| `.btn`          | Base button (combine with `.primary`, `.ghost`, `.danger`, `.sm`, `.lg`, `.icon`)                       |
+| `.chip`         | Badge/tag (combine with `.cobalt`, `.coral`, `.success`, `.warn`, `.danger`, `.ink`, `.outline`, `.sq`) |
+| `.avatar`       | Initials avatar circle (combine with `.lg`, `.xl`)                                                      |
+| `.avatar-stack` | Overlapping avatar row                                                                                  |
+| `.input`        | Text input with focus ring                                                                              |
+| `.checkbox`     | Circular task checkbox (combine with `.done`)                                                           |
+| `.task-row`     | 5-column task list row with hover and selected states                                                   |
+| `.card`         | White card with border and `--r-lg` radius                                                              |
+| `.panel`        | White panel with `--shadow-pop`                                                                         |
+| `.eyebrow`      | Uppercase section label                                                                                 |
+| `.divider`      | 1px horizontal rule (`.strong` for heavier weight)                                                      |
 
 ### Visual rules
 
@@ -126,9 +142,9 @@ Shared chrome is in `globals.css`. Use these classes directly on HTML elements w
 
 ### Route groups
 
-| Group | URL | Purpose |
-|-------|-----|---------|
-| `(auth)/` | `/login`, `/register` | Unauthenticated pages. Layout redirects to `/dashboard` if a session already exists. |
+| Group          | URL                                | Purpose                                                                                                |
+| -------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `(auth)/`      | `/login`, `/register`              | Unauthenticated pages. Layout redirects to `/dashboard` if a session already exists.                   |
 | `(workspace)/` | `/dashboard`, `/lists`, `/members` | Authenticated pages. Layout calls `getRequiredSession()` and redirects to `/login` if unauthenticated. |
 
 ### Component placement
@@ -152,13 +168,13 @@ Client-side React hooks only. Never import from `_hooks/` in a Server Component 
 
 ```ts
 // src/app/api/v1/lists/route.ts
-import { getRequiredSession } from '@/app/_lib/session'
-import { getListsForWorkspace } from '@/db/lists'
+import { getRequiredSession } from "@/app/_lib/session";
+import { getListsForWorkspace } from "@/db/lists";
 
 export async function GET() {
-  const session = await getRequiredSession()           // throws redirect if no session
-  const lists = await getListsForWorkspace(session.workspaceId)
-  return Response.json(lists)
+  const session = await getRequiredSession(); // throws redirect if no session
+  const lists = await getListsForWorkspace(session.workspaceId);
+  return Response.json(lists);
 }
 ```
 
@@ -172,7 +188,7 @@ const TaskList = {
   Provider: TaskListProvider,
   Item: TaskItem,
   Empty: TaskListEmpty,
-}
+};
 ```
 
 ## Relevant skills
