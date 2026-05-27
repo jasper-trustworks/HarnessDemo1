@@ -22,7 +22,7 @@
       "Bash(DATABASE_URL=postgresql://postgres:postgres@localhost:5432/app_db npm run *)",
       "Skill(commit-commands:commit-push-pr)",
       "WebFetch(domain:cli.github.com)",
-      "Skill(commit-commands)"
+      "Skill(commit-commands:commit)"
     ],
     "deny": [
       "Read(**/.next/**)",
