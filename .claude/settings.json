@@ -12,10 +12,23 @@
       "Grep",
       "Read(//home/vscode/.cache/uv/**)",
       "Bash(sudo -n true)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:fonts.googleapis.com)",
+      "Bash(npm pkg *)",
+      "Bash(DATABASE_URL=postgresql://postgres:postgres@localhost:5432/app_db npm run *)"
     ],
     "deny": [],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+     "autoMode": {
+      "environment": [
+        "$defaults",
+        "Source control: github.com/jasper-trustworks and all repos under it are trusted; pushing the project's source there is authorized"
+      ]
+    }
   },
   "sandbox": {
     "enabled": true,
@@ -66,7 +79,6 @@
     }
   },
   "enabledPlugins": {
-    "arch@trustworks-plugins": true,
     "caveman@trustworks-plugins": true,
     "socratic-ideation@trustworks-plugins": true,
     "tw-claude-skills@trustworks-plugins": true,
