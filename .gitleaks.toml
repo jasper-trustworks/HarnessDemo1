@@ -1,0 +1,17 @@
+# Gitleaks config. Extends the default ruleset and allowlists the known
+# local-dev credentials that are intentionally committed (localhost-only,
+# non-secret) so they don't trip the secret scanner.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Local-dev, non-secret credentials and example/config files"
+paths = [
+  '''\.env\.local\.example''',
+  '''docker-compose\.postgres\.yml''',
+  '''\.claude/settings\.json''',
+]
+regexes = [
+  '''postgresql://postgres:postgres@localhost:5432/app_db''',
+  '''postgres:postgres''',
+]
