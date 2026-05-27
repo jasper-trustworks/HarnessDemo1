@@ -110,7 +110,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "export PATH=\"$HOME/.local/bin:$PATH\"; command -v agr >/dev/null 2>&1 && agr sync >/dev/null 2>&1 || true",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/sync-skills.sh\"",
             "timeout": 120,
             "statusMessage": "Syncing agent skills (agr sync)…"
           }
