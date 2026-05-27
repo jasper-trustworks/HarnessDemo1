@@ -248,6 +248,15 @@ fi
 git config --global --add safe.directory /workspace 2>/dev/null || true
 git config --global pull.rebase true 2>/dev/null || true
 
+# Use gh as the credential helper for this workspace (local config overrides global).
+# VS Code injects its own credential helper into the global gitconfig after post-create
+# runs, but its socket is inaccessible inside the Claude Code sandbox (EPERM). Setting
+# the local helper to `gh auth git-credential` ensures pushes work in the sandbox.
+if command -v gh &> /dev/null; then
+    git -C /workspace config --local credential.helper '!gh auth git-credential'
+    echo "  Git credential.helper: gh auth git-credential (workspace-local)"
+fi
+
 # =============================================================================
 # Docker Content Trust (Conditional)
 # =============================================================================
