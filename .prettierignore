@@ -1,6 +1,7 @@
 .next/
 out/
 node_modules/
+.worktrees/
 .claude/
 .devcontainer/
 src/db/migrations/
