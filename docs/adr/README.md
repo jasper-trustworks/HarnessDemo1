@@ -13,6 +13,7 @@ ADRs capture significant architectural decisions: their context, options conside
 | [0004](0004-data-access-with-orm-and-migrations.md)        | Data Access with a TypeScript Query Layer and Migrations | Accepted | 2026-05-26 |
 | [0005](0005-authentication-and-workspace-authorization.md) | Authentication and Workspace-Scoped Authorization        | Proposed | 2026-05-26 |
 | [0006](0006-static-code-analysis-with-sonarqube.md)        | Static Code Analysis with SonarQube                      | Accepted | 2026-05-27 |
+| [0007](0007-testing-strategy.md)                           | Testing Strategy — Unit, Integration, and End-to-End     | Accepted | 2026-05-27 |
 
 ## Creating a New ADR
 

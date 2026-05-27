@@ -17,6 +17,11 @@ next-env.d.ts
 # Test coverage
 src/coverage/
 
+# Playwright
+/playwright-report/
+/test-results/
+/e2e-results/
+
 # TypeScript build cache
 *.tsbuildinfo
 

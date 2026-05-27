@@ -166,10 +166,31 @@ NODE_ENV=production npm run build  # production build
 npm run format                     # Prettier — format all files in place
 npm run format:check               # Prettier — check only (used in CI)
 npm run lint                       # ESLint + SonarJS
-npm test                           # Vitest
+npm test                           # Vitest unit tests
 npm run test:coverage              # Vitest with lcov coverage → src/coverage/
+npm run test:e2e                   # Playwright E2E tests (requires PostgreSQL)
+npm run test:e2e:ui                # Playwright with interactive UI
 ```
 
 The pre-commit hook (Husky + lint-staged) runs `prettier --write` and `eslint --fix` automatically on staged `.ts/.tsx` files before every commit. Commits are blocked if any non-auto-fixable lint errors remain.
+
+## Testing
+
+Three layers defined in ADR-0007:
+
+| Layer       | Tool                     | Command                    | Scope                                        |
+| ----------- | ------------------------ | -------------------------- | -------------------------------------------- |
+| Unit        | Vitest                   | `npm test`                 | Components, utilities, domain logic — no DB  |
+| Integration | Vitest (separate config) | `npm run test:integration` | Drizzle repository functions against real DB |
+| E2E         | Playwright               | `npm run test:e2e`         | User journeys through the full Next.js app   |
+
+**E2E prerequisites** — PostgreSQL must be running before `npm run test:e2e`:
+
+```bash
+docker compose -f docker-compose.postgres.yml up -d
+npm run test:e2e
+```
+
+Global setup (`e2e/global-setup.ts`) creates a dedicated test database (`app_db_test`), applies all Drizzle migrations, and seeds fixture data. Playwright starts `next dev` on port 3001 (separate from the regular dev server on 3000). Override the database URL with `E2E_DATABASE_URL` if needed.
 
 See `CLAUDE.md` in this directory for agent conventions and `src/db/README.md` for database setup.
