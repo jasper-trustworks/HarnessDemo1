@@ -21,11 +21,12 @@
       "Bash(npm pkg *)",
       "Bash(DATABASE_URL=postgresql://postgres:postgres@localhost:5432/app_db npm run *)",
       "Skill(commit-commands:commit-push-pr)",
-      "WebFetch(domain:cli.github.com)"
+      "WebFetch(domain:cli.github.com)",
+      "Skill(commit-commands)"
     ],
     "deny": [],
     "defaultMode": "auto",
-     "autoMode": {
+    "autoMode": {
       "environment": [
         "$defaults",
         "Source control: github.com/jasper-trustworks and all repos under it are trusted; pushing the project's source there is authorized"
